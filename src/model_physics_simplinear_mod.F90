@@ -23,32 +23,6 @@ MODULE MODEL_PHYSICS_SIMPLINEAR_MOD
   TYPE(SPHYS_HIST_TYPE), POINTER :: GPHIST(:) => NULL()  !! trajectory “memory”
   !---------------------------------------------------------------------
   
-CONTAINS
-  
-  PROCEDURE, PASS :: PRINT => PRINT_CONFIGURATION 
-                                                       !! across timesteps
   END TYPE MODEL_PHYSICS_SIMPLINEAR_TYPE
-  !======================================================================
-
-  CONTAINS 
-
-  SUBROUTINE PRINT_CONFIGURATION(SELF, KDEPTH, KOUTNO)
-  IMPLICIT NONE
-  CLASS(MODEL_PHYSICS_SIMPLINEAR_TYPE), INTENT(IN) :: SELF
-  INTEGER                             , INTENT(IN) :: KDEPTH
-  INTEGER                             , INTENT(IN) :: KOUTNO
-
-  WRITE(KOUTNO,*) REPEAT(' ',KDEPTH) // 'model%yrml_phy_slin : '
-  CALL SELF%YREPHLI%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRCUMFS%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YREGWDWMS%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRECUMF2%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRPHLC%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRPHNC%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRNCL%PRINT(KDEPTH+2, KOUTNO)
-  CALL SELF%YRSRFTLAD%PRINT(KDEPTH+2, KOUTNO)
-  WRITE(KOUTNO,*) REPEAT(' ',KDEPTH+2) // 'model%yrml_phy_slin%gphist not printed as it is trajectory storage'
-
-  END SUBROUTINE PRINT_CONFIGURATION
 
 END MODULE MODEL_PHYSICS_SIMPLINEAR_MOD

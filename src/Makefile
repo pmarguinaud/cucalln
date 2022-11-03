@@ -1,114 +1,124 @@
 include Makefile.inc
 
-./cuadjtq.intfb.ok: ./cuadjtq.intfb.h parkind1.o yomcst.o yoethf.o yoephli.o
+./abor1.intfb.ok: ./abor1.intfb.h 
+	touch ./abor1.intfb.ok
+
+./cuadjtq.intfb.ok: ./cuadjtq.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoephli.o
 	touch ./cuadjtq.intfb.ok
 
-./cuadjtqs.intfb.ok: ./cuadjtqs.intfb.h parkind1.o yomcst.o yoethf.o
+./cuadjtqs.intfb.ok: ./cuadjtqs.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o
 	touch ./cuadjtqs.intfb.ok
 
-./cuascn.intfb.ok: ./cuascn.intfb.h parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o yoecldp.o yom_ygfl.o spp_mod.o
+./cuascn.intfb.ok: ./cuascn.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o yoecldp.o yom_ygfl.o spp_mod.o
 	touch ./cuascn.intfb.ok
 
-./cubasen.intfb.ok: ./cubasen.intfb.h yoephli.o parkind1.o yomcst.o parphy.o yoecumf.o yoecldp.o yoethf.o spp_mod.o
+./cubasen.intfb.ok: ./cubasen.intfb.h yoephli.o parkind1.o yomhook.o yomcst.o parphy.o yoecumf.o yoecldp.o yoethf.o spp_mod.o
 	touch ./cubasen.intfb.ok
 
-./cubasmcn.intfb.ok: ./cubasmcn.intfb.h parkind1.o yomcst.o yoecumf.o
+./cubasmcn.intfb.ok: ./cubasmcn.intfb.h parkind1.o yomhook.o yomcst.o yoecumf.o
 	touch ./cubasmcn.intfb.ok
 
-./cubidiag.intfb.ok: ./cubidiag.intfb.h parkind1.o
+./cubidiag.intfb.ok: ./cubidiag.intfb.h parkind1.o yomhook.o
 	touch ./cubidiag.intfb.ok
 
-./cucalln_mf.intfb.ok: ./cucalln_mf.intfb.h model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomcst.o yoethf.o
+./cucalln_mf.intfb.ok: ./cucalln_mf.intfb.h model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomhook.o yomcst.o yoethf.o
 	touch ./cucalln_mf.intfb.ok
 
-./cuccdia.intfb.ok: ./cuccdia.intfb.h parkind1.o yoephy.o yoerad.o yoephli.o
+./cuccdia.intfb.ok: ./cuccdia.intfb.h parkind1.o yomhook.o yoephy.o yoerad.o yoephli.o
 	touch ./cuccdia.intfb.ok
 
-./cuctracer.intfb.ok: ./cuctracer.intfb.h parkind1.o yomcst.o yoecumf.o yoecumf2.o yomcumfs.o
+./cuctracer.intfb.ok: ./cuctracer.intfb.h parkind1.o yomhook.o yomcst.o yoecumf.o yoecumf2.o yomcumfs.o
 	touch ./cuctracer.intfb.ok
 
-./cuddrafn.intfb.ok: ./cuddrafn.intfb.h yoephli.o parkind1.o yomcst.o yoethf.o yoecumf.o
+./cuddrafn.intfb.ok: ./cuddrafn.intfb.h yoephli.o parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o
 	touch ./cuddrafn.intfb.ok
 
-./cudlfsn.intfb.ok: ./cudlfsn.intfb.h parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o
+./cudlfsn.intfb.ok: ./cudlfsn.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o
 	touch ./cudlfsn.intfb.ok
 
-./cudtdqn.intfb.ok: ./cudtdqn.intfb.h parkind1.o yomcst.o yoethf.o yoecumf.o yoephy.o yoephli.o yophnc.o
+./cudtdqn.intfb.ok: ./cudtdqn.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephy.o yoephli.o yophnc.o
 	touch ./cudtdqn.intfb.ok
 
-./cududv.intfb.ok: ./cududv.intfb.h parkind1.o yomcst.o yoecumf.o spp_mod.o yompertpar.o
+./cududv.intfb.ok: ./cududv.intfb.h parkind1.o yomhook.o yomcst.o yoecumf.o spp_mod.o yompertpar.o
 	touch ./cududv.intfb.ok
 
-./cuentr.intfb.ok: ./cuentr.intfb.h parkind1.o yomcst.o yoecumf.o spp_mod.o
+./cuentr.intfb.ok: ./cuentr.intfb.h parkind1.o yomhook.o yomcst.o yoecumf.o spp_mod.o
 	touch ./cuentr.intfb.ok
 
-./cuflxn.intfb.ok: ./cuflxn.intfb.h parkind1.o yomcst.o yoethf.o yoephli.o yoecumf.o
+./cuflxn.intfb.ok: ./cuflxn.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoephli.o yoecumf.o
 	touch ./cuflxn.intfb.ok
 
-./cuinin.intfb.ok: ./cuinin.intfb.h parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o
+./cuinin.intfb.ok: ./cuinin.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o
 	touch ./cuinin.intfb.ok
 
-./cumastrn.intfb.ok: ./cumastrn.intfb.h model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yom_ygfl.o parkind1.o yomcst.o yoethf.o spp_mod.o yomcape.o
+./cumastrn.intfb.ok: ./cumastrn.intfb.h model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yom_ygfl.o parkind1.o yomhook.o yomcst.o yoethf.o spp_mod.o yomcape.o
 	touch ./cumastrn.intfb.ok
 
-./satur.intfb.ok: ./satur.intfb.h parkind1.o yomcst.o yoethf.o
+./satur.intfb.ok: ./satur.intfb.h parkind1.o yomhook.o yomcst.o yoethf.o
 	touch ./satur.intfb.ok
+
+fcttre.func.ok: fcttre.func.h
+	touch fcttre.func.ok
+fcttrm.func.ok: fcttrm.func.h
+	touch fcttrm.func.ok
+abor1.o: abor1.F90 
+	$(FC) -c abor1.F90
 
 crmdims.o: crmdims.F90 parkind1.o
 	$(FC) -c crmdims.F90
 
-cuadjtq.o: cuadjtq.F90 parkind1.o yomcst.o yoethf.o yoephli.o abor1.intfb.ok fcttre.func.ok
+cuadjtq.o: cuadjtq.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoephli.o abor1.intfb.ok fcttre.func.ok
 	$(FC) -c cuadjtq.F90
 
-cuadjtqs.o: cuadjtqs.F90 parkind1.o yomcst.o yoethf.o fcttre.func.ok
+cuadjtqs.o: cuadjtqs.F90 parkind1.o yomhook.o yomcst.o yoethf.o fcttre.func.ok
 	$(FC) -c cuadjtqs.F90
 
-cuascn.o: cuascn.F90 parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o yoecldp.o yom_ygfl.o spp_mod.o cuadjtq.intfb.ok cubasmcn.intfb.ok cuentr.intfb.ok fcttre.func.ok
+cuascn.o: cuascn.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o yoecldp.o yom_ygfl.o spp_mod.o cuadjtq.intfb.ok cubasmcn.intfb.ok cuentr.intfb.ok fcttre.func.ok
 	$(FC) -c cuascn.F90
 
-cubasen.o: cubasen.F90 yoephli.o parkind1.o yomcst.o parphy.o yoecumf.o yoecldp.o yoethf.o spp_mod.o cuadjtq.intfb.ok fcttre.func.ok
+cubasen.o: cubasen.F90 yoephli.o parkind1.o yomhook.o yomcst.o parphy.o yoecumf.o yoecldp.o yoethf.o spp_mod.o cuadjtq.intfb.ok fcttre.func.ok
 	$(FC) -c cubasen.F90
 
-cubasmcn.o: cubasmcn.F90 parkind1.o yomcst.o yoecumf.o
+cubasmcn.o: cubasmcn.F90 parkind1.o yomhook.o yomcst.o yoecumf.o
 	$(FC) -c cubasmcn.F90
 
-cubidiag.o: cubidiag.F90 parkind1.o
+cubidiag.o: cubidiag.F90 parkind1.o yomhook.o
 	$(FC) -c cubidiag.F90
 
-cucalln_mf.o: cucalln_mf.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomcst.o yoethf.o cuccdia.intfb.ok cumastrn.intfb.ok satur.intfb.ok fcttre.func.ok fcttrm.func.ok
+cucalln_mf.o: cucalln_mf.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomhook.o yomcst.o yoethf.o cuccdia.intfb.ok cumastrn.intfb.ok satur.intfb.ok fcttre.func.ok fcttrm.func.ok
 	$(FC) -c cucalln_mf.F90
 
-cuccdia.o: cuccdia.F90 parkind1.o yoephy.o yoerad.o yoephli.o
+cuccdia.o: cuccdia.F90 parkind1.o yomhook.o yoephy.o yoerad.o yoephli.o
 	$(FC) -c cuccdia.F90
 
-cuctracer.o: cuctracer.F90 parkind1.o yomcst.o yoecumf.o yoecumf2.o yomcumfs.o cubidiag.intfb.ok
+cuctracer.o: cuctracer.F90 parkind1.o yomhook.o yomcst.o yoecumf.o yoecumf2.o yomcumfs.o cubidiag.intfb.ok
 	$(FC) -c cuctracer.F90
 
-cuddrafn.o: cuddrafn.F90 yoephli.o parkind1.o yomcst.o yoethf.o yoecumf.o cuadjtq.intfb.ok
+cuddrafn.o: cuddrafn.F90 yoephli.o parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o cuadjtq.intfb.ok
 	$(FC) -c cuddrafn.F90
 
-cudlfsn.o: cudlfsn.F90 parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o cuadjtq.intfb.ok fcttre.func.ok
+cudlfsn.o: cudlfsn.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o cuadjtq.intfb.ok fcttre.func.ok
 	$(FC) -c cudlfsn.F90
 
-cudtdqn.o: cudtdqn.F90 parkind1.o yomcst.o yoethf.o yoecumf.o yoephy.o yoephli.o yophnc.o cubidiag.intfb.ok fcttre.func.ok
+cudtdqn.o: cudtdqn.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephy.o yoephli.o yophnc.o cubidiag.intfb.ok fcttre.func.ok
 	$(FC) -c cudtdqn.F90
 
-cududv.o: cududv.F90 parkind1.o yomcst.o yoecumf.o spp_mod.o yompertpar.o cubidiag.intfb.ok
+cududv.o: cududv.F90 parkind1.o yomhook.o yomcst.o yoecumf.o spp_mod.o yompertpar.o cubidiag.intfb.ok
 	$(FC) -c cududv.F90
 
-cuentr.o: cuentr.F90 parkind1.o yomcst.o yoecumf.o spp_mod.o
+cuentr.o: cuentr.F90 parkind1.o yomhook.o yomcst.o yoecumf.o spp_mod.o
 	$(FC) -c cuentr.F90
 
-cuflxn.o: cuflxn.F90 parkind1.o yomcst.o yoethf.o yoephli.o yoecumf.o fcttre.func.ok
+cuflxn.o: cuflxn.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoephli.o yoecumf.o fcttre.func.ok
 	$(FC) -c cuflxn.F90
 
-cuinin.o: cuinin.F90 parkind1.o yomcst.o yoethf.o yoecumf.o yoephli.o cuadjtq.intfb.ok cuadjtqs.intfb.ok
+cuinin.o: cuinin.F90 parkind1.o yomhook.o yomcst.o yoethf.o yoecumf.o yoephli.o cuadjtq.intfb.ok cuadjtqs.intfb.ok
 	$(FC) -c cuinin.F90
 
-cumastrn.o: cumastrn.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yom_ygfl.o parkind1.o yomcst.o yoethf.o spp_mod.o yomcape.o cuascn.intfb.ok cubasen.intfb.ok cuddrafn.intfb.ok cudlfsn.intfb.ok cudtdqn.intfb.ok cududv.intfb.ok cuflxn.intfb.ok cuinin.intfb.ok cuctracer.intfb.ok fcttre.func.ok
+cumastrn.o: cumastrn.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yom_ygfl.o parkind1.o yomhook.o yomcst.o yoethf.o spp_mod.o yomcape.o cuascn.intfb.ok cubasen.intfb.ok cuddrafn.intfb.ok cudlfsn.intfb.ok cudtdqn.intfb.ok cududv.intfb.ok cuflxn.intfb.ok cuinin.intfb.ok cuctracer.intfb.ok fcttre.func.ok
 	$(FC) -c cumastrn.F90
 
-main_cucalln_mf.o: main_cucalln_mf.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomcst.o yoethf.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_terad_mod.o util_type_gfld_mod.o util_tcst_mod.o util_tthf_mod.o cucalln_mf.intfb.ok
+main_cucalln_mf.o: main_cucalln_mf.F90 model_physics_ecmwf_mod.o model_physics_simplinear_mod.o yoerad.o yom_ygfl.o parkind1.o yomhook.o yomcst.o yoethf.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_terad_mod.o util_type_gfld_mod.o util_tcst_mod.o util_tthf_mod.o cucalln_mf.intfb.ok
 	$(FC) -c main_cucalln_mf.F90
 
 model_physics_ecmwf_mod.o: model_physics_ecmwf_mod.F90 yoephy.o yoecld.o yoecldp.o yoecnd.o yoecumf.o yoe_cuconvca.o yoegwd.o yoegwwms.o yoethf.o
@@ -126,10 +136,10 @@ parkind1.o: parkind1.F90
 parphy.o: parphy.F90 parkind1.o
 	$(FC) -c parphy.F90
 
-satur.o: satur.F90 parkind1.o yomcst.o yoethf.o fcttre.func.ok
+satur.o: satur.F90 parkind1.o yomhook.o yomcst.o yoethf.o fcttre.func.ok
 	$(FC) -c satur.F90
 
-spp_mod.o: spp_mod.F90 parkind1.o
+spp_mod.o: spp_mod.F90 parkind1.o yomhook.o
 	$(FC) -c spp_mod.F90
 
 util_model_physics_ecmwf_type_mod.o: util_model_physics_ecmwf_type_mod.F90 model_physics_ecmwf_mod.o util_tecldp_mod.o util_tecld_mod.o util_tecnd_mod.o util_tecuconvca_mod.o util_tecumf_mod.o util_tegwd_mod.o util_tegwwms_mod.o util_tephy_mod.o util_tthf_mod.o
@@ -267,6 +277,9 @@ yomcst.o: yomcst.F90 parkind1.o
 yomcumfs.o: yomcumfs.F90 
 	$(FC) -c yomcumfs.F90
 
+yomhook.o: yomhook.F90 parkind1.o
+	$(FC) -c yomhook.F90
+
 yomncl.o: yomncl.F90 parkind1.o
 	$(FC) -c yomncl.F90
 
@@ -285,12 +298,12 @@ yophlc.o: yophlc.F90 parkind1.o
 yophnc.o: yophnc.F90 
 	$(FC) -c yophnc.F90
 
-main_cucalln_mf.x: main_cucalln_mf.o crmdims.o cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o model_physics_ecmwf_mod.o model_physics_simplinear_mod.o par_gfl.o parkind1.o parphy.o satur.o spp_mod.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_sphys_hist_type_mod.o util_tcst_mod.o util_tcumfs_mod.o util_tecld_mod.o util_tecldp_mod.o util_tecnd_mod.o util_tecuconvca_mod.o util_tecumf2_mod.o util_tecumf_mod.o util_tegwd_mod.o util_tegwdwms_mod.o util_tegwwms_mod.o util_tephli_mod.o util_tephy_mod.o util_terad_mod.o util_tncl_mod.o util_tphlc_mod.o util_tphnc_mod.o util_tspectralplanck_mod.o util_tsrftlad_mod.o util_tthf_mod.o util_type_gfl_comp_mod.o util_type_gfl_naml_mod.o util_type_gfld_mod.o yoe_aerodiag.o yoe_cuconvca.o yoe_spectral_planck.o yoecld.o yoecldp.o yoecnd.o yoecumf.o yoecumf2.o yoegwd.o yoegwdwms.o yoegwwms.o yoephli.o yoephy.o yoerad.o yoethf.o yom_ygfl.o yomcape.o yomcst.o yomcumfs.o yomncl.o yompertpar.o yomsphyhist.o yomsrftlad.o yophlc.o yophnc.o
-	$(FC) -o main_cucalln_mf.x main_cucalln_mf.o crmdims.o cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o model_physics_ecmwf_mod.o model_physics_simplinear_mod.o par_gfl.o parkind1.o parphy.o satur.o spp_mod.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_sphys_hist_type_mod.o util_tcst_mod.o util_tcumfs_mod.o util_tecld_mod.o util_tecldp_mod.o util_tecnd_mod.o util_tecuconvca_mod.o util_tecumf2_mod.o util_tecumf_mod.o util_tegwd_mod.o util_tegwdwms_mod.o util_tegwwms_mod.o util_tephli_mod.o util_tephy_mod.o util_terad_mod.o util_tncl_mod.o util_tphlc_mod.o util_tphnc_mod.o util_tspectralplanck_mod.o util_tsrftlad_mod.o util_tthf_mod.o util_type_gfl_comp_mod.o util_type_gfl_naml_mod.o util_type_gfld_mod.o yoe_aerodiag.o yoe_cuconvca.o yoe_spectral_planck.o yoecld.o yoecldp.o yoecnd.o yoecumf.o yoecumf2.o yoegwd.o yoegwdwms.o yoegwwms.o yoephli.o yoephy.o yoerad.o yoethf.o yom_ygfl.o yomcape.o yomcst.o yomcumfs.o yomncl.o yompertpar.o yomsphyhist.o yomsrftlad.o yophlc.o yophnc.o $(LIBS)
+main_cucalln_mf.x: main_cucalln_mf.o abor1.o crmdims.o cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o model_physics_ecmwf_mod.o model_physics_simplinear_mod.o par_gfl.o parkind1.o parphy.o satur.o spp_mod.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_sphys_hist_type_mod.o util_tcst_mod.o util_tcumfs_mod.o util_tecld_mod.o util_tecldp_mod.o util_tecnd_mod.o util_tecuconvca_mod.o util_tecumf2_mod.o util_tecumf_mod.o util_tegwd_mod.o util_tegwdwms_mod.o util_tegwwms_mod.o util_tephli_mod.o util_tephy_mod.o util_terad_mod.o util_tncl_mod.o util_tphlc_mod.o util_tphnc_mod.o util_tspectralplanck_mod.o util_tsrftlad_mod.o util_tthf_mod.o util_type_gfl_comp_mod.o util_type_gfl_naml_mod.o util_type_gfld_mod.o yoe_aerodiag.o yoe_cuconvca.o yoe_spectral_planck.o yoecld.o yoecldp.o yoecnd.o yoecumf.o yoecumf2.o yoegwd.o yoegwdwms.o yoegwwms.o yoephli.o yoephy.o yoerad.o yoethf.o yom_ygfl.o yomcape.o yomcst.o yomcumfs.o yomhook.o yomncl.o yompertpar.o yomsphyhist.o yomsrftlad.o yophlc.o yophnc.o
+	$(FC) -o main_cucalln_mf.x main_cucalln_mf.o abor1.o crmdims.o cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o model_physics_ecmwf_mod.o model_physics_simplinear_mod.o par_gfl.o parkind1.o parphy.o satur.o spp_mod.o util_model_physics_ecmwf_type_mod.o util_model_physics_simplinear_type_mod.o util_sphys_hist_type_mod.o util_tcst_mod.o util_tcumfs_mod.o util_tecld_mod.o util_tecldp_mod.o util_tecnd_mod.o util_tecuconvca_mod.o util_tecumf2_mod.o util_tecumf_mod.o util_tegwd_mod.o util_tegwdwms_mod.o util_tegwwms_mod.o util_tephli_mod.o util_tephy_mod.o util_terad_mod.o util_tncl_mod.o util_tphlc_mod.o util_tphnc_mod.o util_tspectralplanck_mod.o util_tsrftlad_mod.o util_tthf_mod.o util_type_gfl_comp_mod.o util_type_gfl_naml_mod.o util_type_gfld_mod.o yoe_aerodiag.o yoe_cuconvca.o yoe_spectral_planck.o yoecld.o yoecldp.o yoecnd.o yoecumf.o yoecumf2.o yoegwd.o yoegwdwms.o yoegwwms.o yoephli.o yoephy.o yoerad.o yoethf.o yom_ygfl.o yomcape.o yomcst.o yomcumfs.o yomhook.o yomncl.o yompertpar.o yomsphyhist.o yomsrftlad.o yophlc.o yophnc.o $(LIBS)
 
 
 subclean:
-	\rm -f cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o main_cucalln_mf.o satur.o
+	\rm -f abor1.o cuadjtq.o cuadjtqs.o cuascn.o cubasen.o cubasmcn.o cubidiag.o cucalln_mf.o cuccdia.o cuctracer.o cuddrafn.o cudlfsn.o cudtdqn.o cududv.o cuentr.o cuflxn.o cuinin.o cumastrn.o main_cucalln_mf.o satur.o
 
 fyppclean: 
 	\rm -f 
