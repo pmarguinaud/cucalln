@@ -1,0 +1,6 @@
+*.F90.xml
+*.o
+*.a
+*.x
+*.mod
+*.optrpt

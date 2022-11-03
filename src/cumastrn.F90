@@ -394,7 +394,7 @@ ENDDO
 !                  ---------------------------------------------------
 
 CALL CUININ &
- & (YDCST, YDML_PHY_SLIN%YREPHLI,  YDML_PHY_EC%YRECUMF,&
+ & (YDCST,   YDTHF, YDML_PHY_SLIN%YREPHLI,  YDML_PHY_EC%YRECUMF,&
  & KIDIA,    KFDIA,    KLON,     KLEV,&
  & PTEN,     PQEN,     PQSEN,    PUEN,     PVEN,&
  & PGEO,     PAPH,&
@@ -651,7 +651,7 @@ IF(LMFDD) THEN
 !                  -----------------------------------------------
 
   CALL CUDDRAFN &
-   & (YDCST, YDML_PHY_SLIN%YREPHLI,YDML_PHY_EC%YRECUMF,&
+   & (YDCST,   YDTHF,    YDML_PHY_SLIN%YREPHLI,YDML_PHY_EC%YRECUMF,&
    & KIDIA,    KFDIA,    KLON,    KLEV,&
    & LLDDRAF,&
    & ZTENH,    ZQENH,    PQSEN,&
