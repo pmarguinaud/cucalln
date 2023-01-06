@@ -127,8 +127,8 @@ sub preProcessIfNewer
 
   #   &addSeqDirective ($d);
 
-  #   &Stack::addStack ($d);
-  #   &saveToFile ($d, "tmp/addStack/$f2");
+      &Stack::addStack ($d);
+      &saveToFile ($d, "tmp/addStack/$f2");
 
       'FileHandle'->new (">$f2")->print ($d->textContent ());
 
