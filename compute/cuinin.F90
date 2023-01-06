@@ -159,12 +159,12 @@ DO JK=2,KLEV
     ICALL=0
     CALL CUADJTQS &
      & ( YDTHF, YDCST, KIDIA,    KFDIA,    KLON,    KLEV,     IK,&
-     &   ZPH,      PTENH,    PQSENH,  LLFLAG,   ICALL)  
+     &   ZPH,      PTENH,    PQSENH,  LLFLAG,   0)  
   ELSE
     ICALL=3
     CALL CUADJTQ &
      & ( YDTHF, YDCST, YDEPHLI,  KIDIA,    KFDIA,    KLON,    KLEV,     IK,&
-     &   ZPH,      PTENH,    PQSENH,  LLFLAG,   ICALL)  
+     &   ZPH,      PTENH,    PQSENH,  LLFLAG,   3)  
   ENDIF
 
   DO JL=KIDIA,KFDIA

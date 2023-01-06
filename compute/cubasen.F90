@@ -467,7 +467,7 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
      
     CALL CUADJTQ &
      & ( YDTHF, YDCST, YDEPHLI,  KIDIA,    KFDIA,    KLON,    KLEV,      IK,&
-     &   ZPH,      ZTU,      ZQU,     LLGO_ON,   ICALL)  
+     &   ZPH,      ZTU,      ZQU,     LLGO_ON,   1)  
    
    !DIR$ IVDEP
    !OCL NOVREC

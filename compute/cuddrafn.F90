@@ -235,7 +235,7 @@ DO JK=3,KLEV
   ICALL=2
   CALL CUADJTQ &
    & ( YDTHF, YDCST, YDEPHLI,  KIDIA,    KFDIA,    KLON,     KLEV,     IK, &
-   &   ZPH,      PTD,      PQD,      LLO2,     ICALL )  
+   &   ZPH,      PTD,      PQD,      LLO2,     2 )  
 
   DO JL=KIDIA,KFDIA
     IF(LLO2(JL)) THEN

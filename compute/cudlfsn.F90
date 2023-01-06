@@ -244,7 +244,7 @@ IF(LMFDD) THEN
     ICALL=2
     CALL CUADJTQ &
      & ( YDTHF, YDCST, YDEPHLI,  KIDIA,    KFDIA,    KLON,     KLEV,     IK,&
-     &   ZPH,      ZTENWB,   ZQENWB,   LLO2,     ICALL)  
+     &   ZPH,      ZTENWB,   ZQENWB,   LLO2,     KCALL=2)  
 
 !     2.2          DO MIXING OF CUMULUS AND ENVIRONMENTAL AIR
 !                  AND CHECK FOR NEGATIVE BUOYANCY.

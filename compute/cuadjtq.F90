@@ -102,14 +102,11 @@ LOGICAL :: LLFLAG(KLON)
 
 !DIR$ VFUNCTION EXPHF
 #include "fcttre.func.h"
+#include "cuadjtq.func.h"
 
 !     STATEMENT FUNCTIONS
 
-REAL(KIND=JPRB) :: MINJ, MAXJ, X, Y
 REAL(KIND=JPRB) :: ZHOOK_HANDLE
-
-MINJ(X,Y) = Y - 0.5_JPRB*(ABS(X-Y)-(X-Y))
-MAXJ(X,Y) = Y + 0.5_JPRB*(ABS(X-Y)+(X-Y))
 
 !----------------------------------------------------------------------
 
@@ -170,7 +167,7 @@ IF (.NOT.LPHYLIN) THEN
         ZQSAT=R2ES *(FOEALFCU(PT(JL,KK))*EXP(R3LES*(PT(JL,KK)-RTT)*ZL)+&
           &(1.0_JPRB-FOEALFCU(PT(JL,KK)))*EXP(R3IES*(PT(JL,KK)-RTT)*ZI))
         ZQSAT=ZQSAT*ZQP
-        ZQSAT=MINJ(0.5_JPRB,ZQSAT)
+        ZQSAT=FMINJ(0.5_JPRB,ZQSAT)
         ZCOR=1.0_JPRB-RETV*ZQSAT
         ZF=FOEALFCU(PT(JL,KK))*R5ALVCP*ZL**2 +&
           &(1.0_JPRB-FOEALFCU(PT(JL,KK)))*R5ALSCP*ZI**2
@@ -199,7 +196,7 @@ IF (.NOT.LPHYLIN) THEN
           ZL=1.0_JPRB/(PT(JL,KK)-R4LES)
           ZQSAT=R2ES *EXP(R3LES*(PT(JL,KK)-RTT)*ZL)
           ZQSAT=ZQSAT*ZQP
-          ZQSAT=MINJ(0.5_JPRB,ZQSAT)
+          ZQSAT=FMINJ(0.5_JPRB,ZQSAT)
           ZCOR=1.0_JPRB-RETV*ZQSAT
           ZF=R5ALVCP*ZL**2
           ZCOND1=(PQ(JL,KK)*ZCOR**2-ZQSAT*ZCOR)/(ZCOR**2+ZQSAT*ZF)

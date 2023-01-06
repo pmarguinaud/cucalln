@@ -544,7 +544,7 @@ DO JK=KLEV-1,3,-1
     IF(JLM > 0) THEN
       CALL CUADJTQ &
        & ( YDTHF, YDCST, YDEPHLI, KIDIA,    KFDIA,    KLON,     KLEV,    IK,&
-       &   ZPH,      PTU,      PQU,      LLFLAG,  ICALL,  LLSCVFLAG )  
+       &   ZPH,      PTU,      PQU,      LLFLAG,  1,  LLSCVFLAG )  
     ENDIF
 
     IF (LPHYLIN) THEN
