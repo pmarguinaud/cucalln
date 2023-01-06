@@ -1,4 +1,5 @@
 SUBROUTINE ABOR1 (CDMESS)
+!$acc routine (ABOR1) seq
 CHARACTER (LEN=*) :: CDMESS
 
 PRINT *, CDMESS

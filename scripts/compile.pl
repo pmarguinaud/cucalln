@@ -72,19 +72,29 @@ sub replaceJLByJLON
     }
 }
 
-sub removeIVDEP
+sub removeDIR
 {
   my $d = shift;
 
-  # !DIR$    IVDEP
-  # !DEC$    IVDEP
+  # !DIR$ 
+  # !DEC$
 
-  my @dir = &F ('.//C[translate(string(.)," ","")="!DIR$IVDEP" or translate(string(.)," ","")="!DEC$IVDEP"]', $d);
+  my @dir = &F ('.//C[starts-with(string(.),"!DIR$") or starts-with(string(.),"!DEC$")]', $d);
 
   for (@dir)
     {
       $_->unbindNode ();
     }
+
+}
+
+sub removeSPP
+{
+  my $d = shift;
+
+  use Construct;
+
+  &Construct::apply ($d, '//named-E[string(.)="YSPP_CONFIG%LSPP"]', &e ('.FALSE.'));
 
 }
 
@@ -97,6 +107,7 @@ sub preProcessIfNewer
   use Loop;
   use ReDim;
   use DrHook;
+  use Construct;
 
   my ($f1, $f2) = @_;
 
@@ -108,7 +119,14 @@ sub preProcessIfNewer
       &saveToFile ($d, "tmp/$f2");
 
       &replaceJLByJLON ($d);
-      &removeIVDEP ($d);
+
+      &removeDIR ($d);
+      &saveToFile ($d, "tmp/removeDIR/$f2");
+
+      &removeSPP ($d);
+      &saveToFile ($d, "tmp/removeSPP/$f2");
+
+      &Construct::apply ($d, '//named-E[string(.)="LMCAPEA"]', &e ('.FALSE.'));
 
       &Associate::resolveAssociates ($d);
       &saveToFile ($d, "tmp/resolveAssociates/$f2");

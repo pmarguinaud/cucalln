@@ -288,44 +288,46 @@ ENDDO
          &  KCTOP, LLCUMBAS, &
          &  ZMFUU,    ZB,    ZDVDT,   ZR2 )
 
-     ! prepare SPP perturbations
-      LLPERT_CUDUDV=YSPP_CONFIG%LSPP.AND.YSPP_CONFIG%LPERT_CUDUDV
-     ! prepare RP perturbation
-      LLPPAR_CUDUV=LPERTPAR.AND.LPERT_CUDUV
-      IF ((LLPERT_CUDUDV).OR.(LLPPAR_CUDUV)) THEN
-        IPCUDU = YSPP%MPCUDU
-        IPCUDV = YSPP%MPCUDV
-        ZMDU   = 1.0_JPRB    ! mean      zonal momentum transport pdf
-        ZMDV   = 1.0_JPRB    ! mean meridional momentum transport pdf
-        ZLIMN2 = 9.0_JPRB*YSPP_CONFIG%SDEV**2    ! limit for norm squared (3 stdev)
+      IF (YSPP_CONFIG%LSPP) THEN
+       ! prepare SPP perturbations
+        LLPERT_CUDUDV=YSPP_CONFIG%LSPP.AND.YSPP_CONFIG%LPERT_CUDUDV
+       ! prepare RP perturbation
+        LLPPAR_CUDUV=LPERTPAR.AND.LPERT_CUDUV
+        IF ((LLPERT_CUDUDV).OR.(LLPPAR_CUDUV)) THEN
+          IPCUDU = YSPP%MPCUDU
+          IPCUDV = YSPP%MPCUDV
+          ZMDU   = 1.0_JPRB    ! mean      zonal momentum transport pdf
+          ZMDV   = 1.0_JPRB    ! mean meridional momentum transport pdf
+          ZLIMN2 = 9.0_JPRB*YSPP_CONFIG%SDEV**2    ! limit for norm squared (3 stdev)
 
-        DO JL=KIDIA,KFDIA
-          IF (KTYPE(JL)==1 .OR. KTYPE(JL)==2) THEN  !perturb deep/shallow convection
-            IF(.NOT.LLPPAR_CUDUV) THEN
-             ZXU=PGP2DSPP(JL, IPCUDU)
-             ZXV=PGP2DSPP(JL, IPCUDV)
-            ELSE
-             ZXU=CUDU_MOD
-             ZXV=CUDV_MOD
+          DO JL=KIDIA,KFDIA
+            IF (KTYPE(JL)==1 .OR. KTYPE(JL)==2) THEN  !perturb deep/shallow convection
+              IF(.NOT.LLPPAR_CUDUV) THEN
+               ZXU=PGP2DSPP(JL, IPCUDU)
+               ZXV=PGP2DSPP(JL, IPCUDV)
+              ELSE
+               ZXU=CUDU_MOD
+               ZXV=CUDV_MOD
+              ENDIF
+              ZN2=ZXU**2+ZXV**2
+              IF (ZN2>ZLIMN2) THEN
+                ZFAC=SQRT(ZLIMN2/ZN2)
+                ZXU = ZFAC*ZXU
+                ZXV = ZFAC*ZXV
+              ENDIF
+              IF(.NOT.LLPPAR_CUDUV) THEN
+               ZRDU(JL)=ZMDU + YSPP_CONFIG%CMPERT_CUDU*ZXU
+               ZRDV(JL)=ZMDV + YSPP_CONFIG%CMPERT_CUDV*ZXV
+              ELSE
+               ZRDU(JL)=ZMDU + ZXU
+               ZRDV(JL)=ZMDV + ZXV
+              ENDIF
+            ELSE  !other convection - unperturbed
+              ZRDU(JL)=ZMDU
+              ZRDV(JL)=ZMDV
             ENDIF
-            ZN2=ZXU**2+ZXV**2
-            IF (ZN2>ZLIMN2) THEN
-              ZFAC=SQRT(ZLIMN2/ZN2)
-              ZXU = ZFAC*ZXU
-              ZXV = ZFAC*ZXV
-            ENDIF
-            IF(.NOT.LLPPAR_CUDUV) THEN
-             ZRDU(JL)=ZMDU + YSPP_CONFIG%CMPERT_CUDU*ZXU
-             ZRDV(JL)=ZMDV + YSPP_CONFIG%CMPERT_CUDV*ZXV
-            ELSE
-             ZRDU(JL)=ZMDU + ZXU
-             ZRDV(JL)=ZMDV + ZXV
-            ENDIF
-          ELSE  !other convection - unperturbed
-            ZRDU(JL)=ZMDU
-            ZRDV(JL)=ZMDV
-          ENDIF
-        ENDDO
+          ENDDO
+        ENDIF
       ENDIF
 
      

@@ -6,7 +6,18 @@ TYPE STACK
   INTEGER*8 :: L, U
 END TYPE
 
-PRIVATE
-PUBLIC :: STACK
+CONTAINS
+
+SUBROUTINE SB (CDF)
+
+!$acc routine (SB) seq
+
+CHARACTER(LEN=*) :: CDF
+
+#include "abor1.intfb.h"
+
+CALL ABOR1 (CDF)
+
+END SUBROUTINE
 
 END MODULE
