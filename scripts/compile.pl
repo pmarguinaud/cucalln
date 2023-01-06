@@ -60,6 +60,25 @@ sub addSeqDirective
   $pu->insertAfter (&t ("\n"), $pu->firstChild);
 }
 
+sub replaceJLByJLON
+{
+  my $d = shift;
+
+  my @expr = &F ('.//named-E[string(N)="JL"]/N/n/text()', $d);
+
+  for (@expr)
+    {
+      $_->setData ('JLON');
+    }
+
+  my @en_decl = &F ('.//EN-N[string(N)="JL"]/N/n/text()', $d);
+
+  for (@en_decl)
+    {
+      $_->setData ('JLON');
+    }
+}
+
 sub preProcessIfNewer
 {
   use Inline;
@@ -78,11 +97,10 @@ sub preProcessIfNewer
       my $d = &Fxtran::parse (location => $f1);
       &saveToFile ($d, "tmp/$f2");
 
+      &replaceJLByJLON ($d);
+
       &Associate::resolveAssociates ($d);
       &saveToFile ($d, "tmp/resolveAssociates/$f2");
-
-  #   &Inline::inlineContainedSubroutines ($d);
-  #   &saveToFile ($d, "tmp/inlineContainedSubroutines/$f2");
 
   #   &Loop::removeJlonLoops ($d);
   #   &saveToFile ($d, "tmp/removeJlonLoops/$f2");
