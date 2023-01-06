@@ -156,20 +156,10 @@ if ($opts{update})
         &copyIfNewer ("../support/$f", $f);
       }
     
-    if ($opts{arch} =~ m/^gpu/o)
+    for my $f (@compute)
       {
-        for my $f (@compute)
-          {
-            &preProcessIfNewer ("../compute/$f", $f);
-          }
+        &preProcessIfNewer ("../compute/$f", $f);
       }
-   else
-     {
-        for my $f (@compute)
-          {
-            &copyIfNewer ("../compute/$f", $f);
-          }
-     }
 
     &copy ("../Makefile.$opts{arch}", "Makefile.inc");
 
