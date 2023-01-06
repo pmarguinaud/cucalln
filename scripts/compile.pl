@@ -103,6 +103,7 @@ sub preProcessIfNewer
   use Stack;
   use Loop;
   use ReDim;
+  use DrHook;
 
   my ($f1, $f2) = @_;
 
@@ -129,6 +130,9 @@ sub preProcessIfNewer
 
       &Stack::addStack ($d);
       &saveToFile ($d, "tmp/addStack/$f2");
+
+      &DrHook::remove ($d);
+      &saveToFile ($d, "tmp/removeDrHook/$f2");
 
       'FileHandle'->new (">$f2")->print ($d->textContent ());
 
