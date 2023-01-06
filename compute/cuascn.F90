@@ -219,7 +219,7 @@ REAL(KIND=JPRB) ::     ZDPMEAN(KLON)
 REAL(KIND=JPRB) ::     ZOENTR(KLON), ZPH(KLON)
 LOGICAL ::  LLFLAG(KLON), LLSCVFLAG(KLON), LLFLAGUV(KLON), LLO1(KLON), LLO3
 
-INTEGER(KIND=JPIM) :: ICALL, IK, IS, JK, JL, IKB
+INTEGER(KIND=JPIM) :: IK, IS, JK, JL, IKB
 INTEGER(KIND=JPIM) :: JLL, JLM, JLX(KLON)
 INTEGER(KIND=JPIM) :: IPENTRORG, IPENTSHALP, IPRPRCON
 
@@ -539,12 +539,16 @@ DO JK=KLEV-1,3,-1
 !                  -----------------------------------
 
     IK=JK
-    ICALL=1
-    IF(LSCVLIQ) ICALL=6
     IF(JLM > 0) THEN
+      IF (LSCVLIQ) THEN
+      CALL CUADJTQ &
+       & ( YDTHF, YDCST, YDEPHLI, KIDIA,    KFDIA,    KLON,     KLEV,    IK,&
+       &   ZPH,      PTU,      PQU,      LLFLAG,  6,  LLSCVFLAG )  
+      ELSE
       CALL CUADJTQ &
        & ( YDTHF, YDCST, YDEPHLI, KIDIA,    KFDIA,    KLON,     KLEV,    IK,&
        &   ZPH,      PTU,      PQU,      LLFLAG,  1,  LLSCVFLAG )  
+      ENDIF
     ENDIF
 
     IF (LPHYLIN) THEN
