@@ -79,6 +79,22 @@ sub replaceJLByJLON
     }
 }
 
+sub removeIVDEP
+{
+  my $d = shift;
+
+  # !DIR$    IVDEP
+  # !DEC$    IVDEP
+
+  my @dir = &F ('.//C[translate(string(.)," ","")="!DIR$IVDEP" or translate(string(.)," ","")="!DEC$IVDEP"]', $d);
+
+  for (@dir)
+    {
+      $_->unbindNode ();
+    }
+
+}
+
 sub preProcessIfNewer
 {
   use Inline;
@@ -98,15 +114,16 @@ sub preProcessIfNewer
       &saveToFile ($d, "tmp/$f2");
 
       &replaceJLByJLON ($d);
+      &removeIVDEP ($d);
 
       &Associate::resolveAssociates ($d);
       &saveToFile ($d, "tmp/resolveAssociates/$f2");
 
-  #   &Loop::removeJlonLoops ($d);
-  #   &saveToFile ($d, "tmp/removeJlonLoops/$f2");
+      &Loop::removeJlonLoops ($d);
+      &saveToFile ($d, "tmp/removeJlonLoops/$f2");
 
-  #   &ReDim::reDim ($d);
-  #   &saveToFile ($d, "tmp/reDim/$f2");
+      &ReDim::reDim ($d);
+      &saveToFile ($d, "tmp/reDim/$f2");
 
   #   &addSeqDirective ($d);
 
