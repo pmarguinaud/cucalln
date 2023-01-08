@@ -17,13 +17,13 @@ SUBROUTINE DIFFR1 (CDN, PA, PB)
 
 CHARACTER (LEN=*) :: CDN
 REAL (KIND=JPRB) :: PA (:), PB (:)
-
 INTEGER :: I1
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I1 = 1, SIZE (PA)
   IF (PA (I1) /= PB (I1)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(I6," ",3E30.20)') I1, PA (I1), PB (I1), PA (I1) - PB (I1)
   ENDIF
 ENDDO
@@ -34,14 +34,14 @@ SUBROUTINE DIFFR2 (CDN, PA, PB)
 
 CHARACTER (LEN=*) :: CDN
 REAL (KIND=JPRB) :: PA (:,:), PB (:,:)
-
 INTEGER :: I1, I2
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I2 = 1, SIZE (PA, 2)
 DO I1 = 1, SIZE (PA, 1)
   IF (PA (I1, I2) /= PB (I1, I2)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(2I6," ",3E30.20)') I1, I2, PA (I1, I2), PB (I1, I2), PA (I1, I2) - PB (I1, I2)
   ENDIF
 ENDDO
@@ -53,14 +53,14 @@ SUBROUTINE DIFFL2 (CDN, LDA, LDB)
 
 CHARACTER (LEN=*) :: CDN
 LOGICAL :: LDA (:,:), LDB (:,:)
-
 INTEGER :: I1, I2
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I2 = 1, SIZE (LDA, 2)
 DO I1 = 1, SIZE (LDA, 1)
   IF (LDA (I1, I2) /= LDB (I1, I2)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(2I6," ",2L30)') I1, I2, LDA (I1, I2), LDB (I1, I2)
   ENDIF
 ENDDO
@@ -72,14 +72,14 @@ SUBROUTINE DIFFI2 (CDN, KA, KB)
 
 CHARACTER (LEN=*) :: CDN
 INTEGER (KIND=JPIM) :: KA (:,:), KB (:,:)
-
 INTEGER :: I1, I2
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I2 = 1, SIZE (KA, 2)
 DO I1 = 1, SIZE (KA, 1)
   IF (KA (I1, I2) /= KB (I1, I2)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(2I6," ",3I30)') I1, I2, KA (I1, I2), KB (I1, I2), KA (I1, I2) - KB (I1, I2)
   ENDIF
 ENDDO
@@ -91,15 +91,15 @@ SUBROUTINE DIFFR3 (CDN, PA, PB)
 
 CHARACTER (LEN=*) :: CDN
 REAL (KIND=JPRB) :: PA (:,:,:), PB (:,:,:)
-
 INTEGER :: I1, I2, I3
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I3 = 1, SIZE (PA, 3)
 DO I2 = 1, SIZE (PA, 2)
 DO I1 = 1, SIZE (PA, 1)
   IF (PA (I1, I2, I3) /= PB (I1, I2, I3)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(3I6," ",3E30.20)') I1, I2, I3, PA (I1, I2, I3), PB (I1, I2, I3), PA (I1, I2, I3) - PB (I1, I2, I3)
   ENDIF
 ENDDO
@@ -112,16 +112,16 @@ SUBROUTINE DIFFR4 (CDN, PA, PB)
 
 CHARACTER (LEN=*) :: CDN
 REAL (KIND=JPRB) :: PA (:,:,:,:), PB (:,:,:,:)
-
 INTEGER :: I1, I2, I3, I4
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I4 = 1, SIZE (PA, 4)
 DO I3 = 1, SIZE (PA, 3)
 DO I2 = 1, SIZE (PA, 2)
 DO I1 = 1, SIZE (PA, 1)
   IF (PA (I1, I2, I3, I4) /= PB (I1, I2, I3, I4)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(4I6," ",3E30.20)') I1, I2, I3, I4, PA (I1, I2, I3, I4), PB (I1, I2, I3, I4), PA (I1, I2, I3, I4) - PB (I1, I2, I3, I4)
   ENDIF
 ENDDO
@@ -135,13 +135,13 @@ SUBROUTINE DIFFI1 (CDN, KA, KB)
 
 CHARACTER (LEN=*) :: CDN
 INTEGER (KIND=JPIM) :: KA (:), KB (:)
-
 INTEGER :: I1
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I1 = 1, SIZE (KA)
   IF (KA (I1) /= KB (I1)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(I6," ",3I30)') I1, KA (I1), KB (I1), KA (I1) - KB (I1)
   ENDIF
 ENDDO
@@ -152,13 +152,13 @@ SUBROUTINE DIFFL1 (CDN, LDA, LDB)
 
 CHARACTER (LEN=*) :: CDN
 LOGICAL :: LDA (:), LDB (:)
-
 INTEGER :: I1
-
-PRINT *, CDN
+LOGICAL :: LLP
+LLP = .TRUE.
 
 DO I1 = 1, SIZE (LDA)
   IF (LDA (I1) /= LDB (I1)) THEN
+    IF (LLP) PRINT *, CDN; LLP = .FALSE.
     WRITE (*, '(I6," ",2L30)') I1, LDA (I1), LDB (I1)
   ENDIF
 ENDDO
