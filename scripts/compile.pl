@@ -109,14 +109,27 @@ sub preProcessIfNewer
   use DrHook;
   use Construct;
   use Dimension;
+  use Call;
+  use Subroutine;
+
+  &copyIfNewer (@_);
 
   my ($f1, $f2) = @_;
+
+  my $SUFFIX = '_SINGLE_COLUMN';
+  my $suffix = lc ($SUFFIX);
+
+  $f2 =~ s/\.F90$/$suffix.F90/;
 
   if (&newer ($f1, $f2))
     {
       print "Preprocess $f1\n";
 
       my $d = &Fxtran::parse (location => $f1);
+     
+      &Call::addSuffix ($d, suffix => $SUFFIX, match => sub { $_[0] !~ m/^(?:DR_HOOK|ABOR1)$/o });
+      &Subroutine::addSuffix ($d, $SUFFIX);
+
       &saveToFile ($d, "tmp/$f2");
 
       &replaceJLByJLON ($d);
