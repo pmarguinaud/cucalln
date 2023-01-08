@@ -108,6 +108,7 @@ sub preProcessIfNewer
   use ReDim;
   use DrHook;
   use Construct;
+  use Dimension;
 
   my ($f1, $f2) = @_;
 
@@ -127,6 +128,7 @@ sub preProcessIfNewer
       &saveToFile ($d, "tmp/removeSPP/$f2");
 
       &Construct::apply ($d, '//named-E[string(.)="LMCAPEA"]', &e ('.FALSE.'));
+      &Dimension::attachArraySpecToEntity ($d);
 
       &Associate::resolveAssociates ($d);
       &saveToFile ($d, "tmp/resolveAssociates/$f2");

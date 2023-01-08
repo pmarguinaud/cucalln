@@ -3,7 +3,7 @@
 for f in compute/*.F90
 do
   b=$(basename $f)
-  rm compile.gpu_nvhpc_d/$b
+  rm compile.*/$b
 done
 
 exit 0
