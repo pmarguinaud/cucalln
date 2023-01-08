@@ -110,6 +110,7 @@ REAL(KIND=JPRB)   , ALLOCATABLE   :: PWMEAN(:,:)
 TYPE (STACK) :: YLSTACK
 REAL (KIND=JPRB), ALLOCATABLE :: ZSTACK (:,:)
 
+#include "cucalln_mf.intfb.h"
 #include "cucalln_mf_single_column.intfb.h"
 
 INTEGER (KIND=JPIM), PARAMETER :: ILUN = 77
@@ -118,7 +119,7 @@ INTEGER (KIND=JPIM) :: JBLK, JLON
 INTEGER(KIND=JPIM)    :: NPROMA1, NGPBLKS1, NPROMA, NGPBLKS
 INTEGER(KIND=JPIM)    :: NTIME, ITIME
 INTEGER (KIND=JPIM) :: ISTACK
-LOGICAL :: LLDIFF, LLVERBOSE
+LOGICAL :: LLDIFF, LLVERBOSE, LLSINGLECOLUMN
 CHARACTER(LEN=256) :: CLCASE, CLCASEREF, CLCASEOUT
 REAL(KIND=8) :: TSC, TEC, TSD, TED, ZTC, ZTD
 
@@ -128,8 +129,6 @@ IF (LHOOK) CALL DR_HOOK('MAIN_CUCALLN_MF',0,ZHOOK_HANDLE)
 
 
 CALL INITOPTIONS 
-CALL GETOPTION ("--diff", LLDIFF)
-CALL GETOPTION ("--verbose", LLVERBOSE)
 CALL GETOPTION ("--case", CLCASE, MND=.TRUE.)
 CLCASEREF=CLCASE
 CALL GETOPTION ("--case-ref", CLCASEREF)
@@ -145,6 +144,9 @@ NGPBLKS1 = 1
 CALL GETOPTION ("--ngpblks1", NGPBLKS1)
 NTIME = 1
 CALL GETOPTION ("--time", NTIME)
+CALL GETOPTION ("--diff", LLDIFF)
+CALL GETOPTION ("--verbose", LLVERBOSE)
+CALL GETOPTION ("--single-column", LLSINGLECOLUMN)
 CALL CHECKOPTIONS
 
 CALL READALL
@@ -173,43 +175,80 @@ DO ITIME = 1, NTIME
 !$acc   &       PMFUDE_RATE, PMFDDE_RATE, PCAPE, PWMEAN, PDISS) &
 !$acc   & create (ZSTACK)
 
+
   CALL CPU_TIME (TSC)
 
+  IF (LLSINGLECOLUMN) THEN
+
+#ifdef _OPENACC
 !$acc parallel loop gang private (YLSTACK) vector_length (NPROMA)
+#else
+!$OMP PARALLEL DO PRIVATE (JLON, KIDIA, KFDIA, YLSTACK)
+#endif
+    DO JBLK = 1, NGPBLKS
 
-!$OMP PARALLEL DO PRIVATE (JLON, KIDIA, KFDIA)
-DO JBLK = 1, NGPBLKS
-
+#ifdef _OPENACC
 !$acc loop vector private (KIDIA, KFDIA, YLSTACK)
-  DO JLON = 1, NPROMA
-    
-    YLSTACK%L = LOC (ZSTACK (1, JBLK))
-    YLSTACK%U = YLSTACK%L + SIZE (ZSTACK, 1) * KIND (ZSTACK)
+#endif
+      DO JLON = 1, NPROMA
+        
+        YLSTACK%L = LOC (ZSTACK (1, JBLK))
+        YLSTACK%U = YLSTACK%L + SIZE (ZSTACK, 1) * KIND (ZSTACK)
+     
+        KIDIA = JLON
+        KFDIA = JLON
+        
+        CALL CUCALLN_MF_SINGLE_COLUMN (PPLDARE, PPLRG, KSTEP, YDTHF, YDCST, YDERAD, YDML_PHY_SLIN,  YDML_PHY_EC, &
+        & YGFL, KIDIA, KFDIA, NPROMA, KSMAX, KLEV, PDX(:,JBLK), KSPPN2D, LDLAND(:,JBLK), LDSLPHY, PTSPHY,        &
+        & PVDIFTS, PTM1(:,:,JBLK), PQM1(:,:,JBLK), PUM1(:,:,JBLK), PVM1(:,:,JBLK), PLITOT(:,:,JBLK),             &
+        & PVERVEL(:,:,JBLK), PQHFL(:,:,JBLK), PAHFS(:,:,JBLK), PAPHM1(:,:,JBLK), PAP(:,:,JBLK),                  &
+        & PAPH(:,:,JBLK), PGEO(:,:,JBLK),  PGEOH(:,:,JBLK), PGAW(:,JBLK), PCUCONVCA(:,JBLK),                     &
+        & PGP2DSPP(:,:,JBLK), PTENT(:,:,JBLK), PTENQ(:,:,JBLK), PTENU(:,:,JBLK), PTENV(:,:,JBLK),                &
+        & PARPRC(:,JBLK), KTOPC(:,JBLK), KBASEC(:,JBLK), KTYPE(:,JBLK),    KCBOT(:,JBLK), KCTOP(:,JBLK),         &
+        & KBOTSC(:,JBLK), LDCUM(:,JBLK), LDSC(:,JBLK), LDSHCV(:,JBLK), PLCRIT_AER(:,:,JBLK),                     &
+        & PLU(:,:,JBLK), PLUDE(:,:,JBLK), PLUDELI(:,:,:,JBLK), PSNDE(:,:,:,JBLK), PMFU(:,:,JBLK),                &
+        & PMFD(:,:,JBLK), PDIFCQ(:,:,JBLK), PDIFCS(:,:,JBLK), PFHPCL(:,:,JBLK), PFHPCN(:,:,JBLK),                &
+        & PFPLCL(:,:,JBLK), PFPLCN(:,:,JBLK), PLRAIN(:,:,JBLK), PRSUD(:,:,:,JBLK), PSTRCU(:,:,JBLK),             &
+        & PSTRCV(:,:,JBLK), PFCQLF(:,:,JBLK),  PFCQIF(:,:,JBLK), PMFUDE_RATE(:,:,JBLK),                          &
+        & PMFDDE_RATE(:,:,JBLK), PCAPE(:,JBLK), PWMEAN(:,JBLK), PDISS(:,:,JBLK), KTRAC, PCM1(:,:,:,JBLK),        &
+        & PTENC(:,:,:,JBLK), PSCAV, YLSTACK)  
+      
+      ENDDO
 
-    KIDIA = JLON
-    KFDIA = JLON
-    
-    CALL CUCALLN_MF_SINGLE_COLUMN (PPLDARE, PPLRG, KSTEP, YDTHF, YDCST, YDERAD, YDML_PHY_SLIN,  YDML_PHY_EC, &
-    & YGFL, KIDIA, KFDIA, NPROMA, KSMAX, KLEV, PDX(:,JBLK), KSPPN2D, LDLAND(:,JBLK), LDSLPHY, PTSPHY,        &
-    & PVDIFTS, PTM1(:,:,JBLK), PQM1(:,:,JBLK), PUM1(:,:,JBLK), PVM1(:,:,JBLK), PLITOT(:,:,JBLK),             &
-    & PVERVEL(:,:,JBLK), PQHFL(:,:,JBLK), PAHFS(:,:,JBLK), PAPHM1(:,:,JBLK), PAP(:,:,JBLK),                  &
-    & PAPH(:,:,JBLK), PGEO(:,:,JBLK),  PGEOH(:,:,JBLK), PGAW(:,JBLK), PCUCONVCA(:,JBLK),                     &
-    & PGP2DSPP(:,:,JBLK), PTENT(:,:,JBLK), PTENQ(:,:,JBLK), PTENU(:,:,JBLK), PTENV(:,:,JBLK),                &
-    & PARPRC(:,JBLK), KTOPC(:,JBLK), KBASEC(:,JBLK), KTYPE(:,JBLK),    KCBOT(:,JBLK), KCTOP(:,JBLK),         &
-    & KBOTSC(:,JBLK), LDCUM(:,JBLK), LDSC(:,JBLK), LDSHCV(:,JBLK), PLCRIT_AER(:,:,JBLK),                     &
-    & PLU(:,:,JBLK), PLUDE(:,:,JBLK), PLUDELI(:,:,:,JBLK), PSNDE(:,:,:,JBLK), PMFU(:,:,JBLK),                &
-    & PMFD(:,:,JBLK), PDIFCQ(:,:,JBLK), PDIFCS(:,:,JBLK), PFHPCL(:,:,JBLK), PFHPCN(:,:,JBLK),                &
-    & PFPLCL(:,:,JBLK), PFPLCN(:,:,JBLK), PLRAIN(:,:,JBLK), PRSUD(:,:,:,JBLK), PSTRCU(:,:,JBLK),             &
-    & PSTRCV(:,:,JBLK), PFCQLF(:,:,JBLK),  PFCQIF(:,:,JBLK), PMFUDE_RATE(:,:,JBLK),                          &
-    & PMFDDE_RATE(:,:,JBLK), PCAPE(:,JBLK), PWMEAN(:,JBLK), PDISS(:,:,JBLK), KTRAC, PCM1(:,:,:,JBLK),        &
-    & PTENC(:,:,:,JBLK), PSCAV, YLSTACK)  
+    ENDDO
+#ifdef _OPENACC
+!$acc end parallel
+#else
+!$OMP END PARALLEL DO
+#endif
+
+  ELSE
+
+!$OMP PARALLEL DO PRIVATE (KIDIA, KFDIA)
+    DO JBLK = 1, NGPBLKS
+
+      KIDIA = 1
+      KFDIA = NPROMA
   
-  ENDDO
-
-ENDDO
+      CALL CUCALLN_MF (PPLDARE, PPLRG, KSTEP, YDTHF, YDCST, YDERAD, YDML_PHY_SLIN,  YDML_PHY_EC,         &
+      & YGFL, KIDIA, KFDIA, NPROMA, KSMAX, KLEV, PDX(:,JBLK), KSPPN2D, LDLAND(:,JBLK), LDSLPHY, PTSPHY,  &
+      & PVDIFTS, PTM1(:,:,JBLK), PQM1(:,:,JBLK), PUM1(:,:,JBLK), PVM1(:,:,JBLK), PLITOT(:,:,JBLK),       &
+      & PVERVEL(:,:,JBLK), PQHFL(:,:,JBLK), PAHFS(:,:,JBLK), PAPHM1(:,:,JBLK), PAP(:,:,JBLK),            &
+      & PAPH(:,:,JBLK), PGEO(:,:,JBLK),  PGEOH(:,:,JBLK), PGAW(:,JBLK), PCUCONVCA(:,JBLK),               &
+      & PGP2DSPP(:,:,JBLK), PTENT(:,:,JBLK), PTENQ(:,:,JBLK), PTENU(:,:,JBLK), PTENV(:,:,JBLK),          &
+      & PARPRC(:,JBLK), KTOPC(:,JBLK), KBASEC(:,JBLK), KTYPE(:,JBLK),    KCBOT(:,JBLK), KCTOP(:,JBLK),   &
+      & KBOTSC(:,JBLK), LDCUM(:,JBLK), LDSC(:,JBLK), LDSHCV(:,JBLK), PLCRIT_AER(:,:,JBLK),               &
+      & PLU(:,:,JBLK), PLUDE(:,:,JBLK), PLUDELI(:,:,:,JBLK), PSNDE(:,:,:,JBLK), PMFU(:,:,JBLK),          &
+      & PMFD(:,:,JBLK), PDIFCQ(:,:,JBLK), PDIFCS(:,:,JBLK), PFHPCL(:,:,JBLK), PFHPCN(:,:,JBLK),          &
+      & PFPLCL(:,:,JBLK), PFPLCN(:,:,JBLK), PLRAIN(:,:,JBLK), PRSUD(:,:,:,JBLK), PSTRCU(:,:,JBLK),       &
+      & PSTRCV(:,:,JBLK), PFCQLF(:,:,JBLK),  PFCQIF(:,:,JBLK), PMFUDE_RATE(:,:,JBLK),                    &
+      & PMFDDE_RATE(:,:,JBLK), PCAPE(:,JBLK), PWMEAN(:,JBLK), PDISS(:,:,JBLK), KTRAC, PCM1(:,:,:,JBLK),  &
+      & PTENC(:,:,:,JBLK), PSCAV)
+  
+    ENDDO
 !$OMP END PARALLEL DO
 
-!$acc end parallel
+  ENDIF
 
   CALL CPU_TIME (TEC)
 
