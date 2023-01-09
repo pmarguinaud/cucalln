@@ -48,7 +48,7 @@ sub saveToFile
       &mkpath ($d);
     }
 
-  'FileHandle'->new (">$f")->print ($x->textContent ());
+  'FileHandle'->new (">$f")->print (&Canonic::indent ($x));
   'FileHandle'->new (">$f.xml")->print ($x->toString ());
 }
 
@@ -111,10 +111,13 @@ sub preProcessIfNewer
   use Dimension;
   use Call;
   use Subroutine;
+  use Canonic;
 
   &copyIfNewer (@_);
 
-  my ($f1, $f2) = @_;
+  my ($f1, $f2, %args) = @_;
+
+  my @inlined = @{ $args{inlined} || [] };
 
   my $SUFFIX = '_SINGLE_COLUMN';
   my $suffix = lc ($SUFFIX);
@@ -125,8 +128,17 @@ sub preProcessIfNewer
     {
       print "Preprocess $f1\n";
 
-      my $d = &Fxtran::parse (location => $f1);
+      my $d = &Fxtran::parse (location => $f1, fopts => [qw (-construct-tag -line-length 512 -canonic -no-include)]);
      
+      &Canonic::makeCanonic ($d);
+
+      for my $in (@inlined)
+        {
+          my $di = &Fxtran::parse (location => $in, fopts => [qw (-construct-tag -line-length 512 -canonic -no-include)]);
+          &Canonic::makeCanonic ($di);
+          &Inline::inlineExternalSubroutine ($d, $di);
+        }
+
       &Call::addSuffix ($d, suffix => $SUFFIX, match => sub { $_[0] !~ m/^(?:DR_HOOK|ABOR1)$/o });
       &Subroutine::addSuffix ($d, $SUFFIX);
 
@@ -160,7 +172,7 @@ sub preProcessIfNewer
       &DrHook::remove ($d);
       &saveToFile ($d, "tmp/removeDrHook/$f2");
 
-      'FileHandle'->new (">$f2")->print ($d->textContent ());
+      &saveToFile ($d, $f2);
 
       &Fxtran::intfb ($f2);
     }
@@ -169,12 +181,14 @@ sub preProcessIfNewer
 my @opts_f = qw (update compile compare compare-prompt);
 my @opts_s = qw (arch);
 
+
 &GetOptions
 (
   map ({ ($_,     \$opts{$_}) } @opts_f),
   map ({ ("$_=s", \$opts{$_}) } @opts_s),
 );
 
+my @inlined = qw (cubasmcn.F90 cuentr.F90 cuadjtq.F90 cuadjtqs.F90);
 my @compute = map { &basename ($_) } <compute/*.F90>;
 my @support = map { &basename ($_) } <support/*>;
 
@@ -189,9 +203,15 @@ if ($opts{update})
         &copyIfNewer ("../support/$f", $f);
       }
     
-    for my $f (@compute)
+    for my $f (@inlined)
       {
         &preProcessIfNewer ("../compute/$f", $f);
+      }
+
+    for my $f (@compute)
+      {
+        next if (grep { $_ eq $f } @inlined);
+        &preProcessIfNewer ("../compute/$f", $f, inlined => \@inlined);
       }
 
     &copy ("../Makefile.$opts{arch}", "Makefile.inc");
