@@ -6,3 +6,4 @@
 *.optrpt
 *.ok
 compile.*
+slurm-*.out
