@@ -178,7 +178,7 @@ sub preProcessIfNewer
     }
 }
 
-my @opts_f = qw (update compile compare compare-prompt);
+my @opts_f = qw (update compile compare compare-prompt inline);
 my @opts_s = qw (arch);
 
 
@@ -191,6 +191,8 @@ my @opts_s = qw (arch);
 my @inlined = qw (cubasmcn.F90 cuentr.F90 cuadjtq.F90 cuadjtqs.F90);
 my @compute = map { &basename ($_) } <compute/*.F90>;
 my @support = map { &basename ($_) } <support/*>;
+
+@inlined = () unless ($opts{inline});
 
 &mkpath ("compile.$opts{arch}");
 
