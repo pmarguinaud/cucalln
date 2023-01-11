@@ -7,6 +7,8 @@ set -x
 
 cd $SLURM_SUBMIT_DIR
 
+export OMP_NUM_THREADS=64
+
 for b in $(cat scripts/blocks.txt)
 do
 
