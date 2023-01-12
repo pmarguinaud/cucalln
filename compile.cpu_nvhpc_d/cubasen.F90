@@ -93,7 +93,7 @@ JKT2=2
   JK = 12
     IS=0
 
-    IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
+    IF(JKK==KLEV.OR.6==KLEV-1) THEN ! 1/z mixing for shallow
        DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
           ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
