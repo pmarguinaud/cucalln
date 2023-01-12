@@ -105,7 +105,7 @@ DO JK=13,2,-1
      ENDDO
 
      IF (JK == 12) THEN
-       WRITE (*, '(" CUBASE 498 ",E30.20)') ZTU(6,JK)
+       WRITE (*, '(E30.20)') ZTU(6,JK)
      ENDIF
 
   ENDIF
@@ -153,7 +153,7 @@ DO JK=13, 2,-1
     ENDIF
 
     IF (JK==12) THEN
-      WRITE (*,'(" CUBASE 498 ",E30.20)') ZTU (JLON, JK)
+      WRITE (*,'(E30.20)') ZTU (JLON, JK)
     ENDIF
 
   ENDIF
