@@ -49,6 +49,22 @@ CALL TEST1
 
 CONTAINS
 
+SUBROUTINE R
+OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED') 
+READ (77) IDUM
+READ (77) IDUM
+READ (77) ZRCPD
+READ (77) LLGO_ON(:)
+READ (77) ZZGEOH(:,:)
+READ (77) ZZQENH(:,:)
+READ (77) ZMIXF(:)
+READ (77) ZQU(:,:)
+READ (77) ZSENH(:,:)
+READ (77) ZSUH(:,:)
+READ (77) ZZAPH(:,:)
+CLOSE (77)
+END SUBROUTINE
+
 SUBROUTINE TEST0 
 
 IMPLICIT NONE
@@ -80,19 +96,7 @@ JKT2=2
     ELSE
 
 IF (JKK == 14 .AND. JK == 12) THEN
- OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED') 
- READ (77) IDUM
- READ (77) IDUM
- READ (77) ZRCPD
- READ (77) LLGO_ON(:)
- READ (77) ZZGEOH(:,:)
- READ (77) ZZQENH(:,:)
- READ (77) ZMIXF(:)
- READ (77) ZQU(:,:)
- READ (77) ZSENH(:,:)
- READ (77) ZSUH(:,:)
- READ (77) ZZAPH(:,:)
- CLOSE (77)
+  CALL R
 ENDIF
 
       DO JL=KIDIA,KFDIA
@@ -155,19 +159,7 @@ JKT2=2
     ELSE
 
       IF (JKK==14.AND.JK==12) THEN
-        OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED')
-        READ (77) IDUM
-        READ (77) IDUM
-        READ (77) ZRCPD
-        READ (77) LLGO_ON 
-        READ (77) ZZGEOH 
-        READ (77) ZZQENH 
-        READ (77) ZMIXF 
-        READ (77) ZQU 
-        READ (77) ZSENH 
-        READ (77) ZSUH 
-        READ (77) ZZAPH 
-        CLOSE (77)
+        CALL R
         ZMIX = ZMIXF (6)
       ENDIF
 
