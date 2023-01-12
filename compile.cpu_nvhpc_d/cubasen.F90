@@ -503,31 +503,11 @@ ENDIF
 
     ENDIF
 
-    IF (IS == 0) EXIT
-     
-    IK=JK
-     
-IF (JKK == 14 .AND. JK == 12) THEN
- WRITE (*, '(" CUBASE 481 ",E30.20)') ZTU(6,JK)
-ENDIF
-    CALL CUADJTQ &
-     & ( YDTHF, YDCST, YDEPHLI,  KIDIA,    KFDIA,    KLON,    KLEV,      IK,&
-     &   ZPH,      ZTU,      ZQU,     LLGO_ON,   1, LDEBUG=JKK == 14 .AND. JK == 12)  
-IF (JKK == 14 .AND. JK == 12) THEN
- WRITE (*, '(" CUBASE 487 ",E30.20)') ZTU(6,JK)
-ENDIF
    
   ENDDO
    
 
-ENDDO ! end of big loop for search of departure level     
-
-      ! chose maximum CAPE value
-PRINT *, " CUBASE 697 ", ZCAPE (6,14)
-DO JL=KIDIA,KFDIA
-  PCAPE(JL) = MAXVAL(ZCAPE(JL,:))
-ENDDO
-PRINT *, " CUBASE 700 ", PCAPE (6)
+ENDDO 
 
 END ASSOCIATE
 IF (LHOOK) CALL DR_HOOK('CUBASEN',1,ZHOOK_HANDLE)
