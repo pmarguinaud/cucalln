@@ -208,6 +208,9 @@ REAL(KIND=JPRB) :: ZWORK1, ZWORK2! work arrays for T and w perturbations
 REAL(KIND=JPRB) :: ZRCPD, ZRG, ZTMP
 REAL(KIND=JPRB) :: ZXENTRORG, ZMU
 REAL(KIND=JPRB) :: ZHOOK_HANDLE
+REAL(KIND=JPRB)     :: ZZQENH(KLON,KLEV) 
+REAL(KIND=JPRB)     :: ZZGEOH(KLON,KLEV+1) 
+REAL(KIND=JPRB)     :: ZZAPH(KLON,KLEV+1) 
 
 JKT1=6
 JKT2=2
@@ -224,7 +227,7 @@ JKT2=2
           ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
          & +2.0_JPRB*ZMIX(JL)*ZSF) * ZTMP  
           ZQOLD(JL)  = ZQU(JL,JK)
-          ZTU (JL,JK) = (ZSUH(JL,JK)-PGEOH(JL,JK))*ZRCPD
+          ZTU (JL,JK) = (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
         ENDIF
       ENDDO
 
@@ -236,13 +239,13 @@ IF (JKK == 14 .AND. JK == 12) THEN
  READ (77) KLEV
  READ (77) ZRCPD
  READ (77) LLGO_ON(:)
- READ (77) PGEOH(:,:)
- READ (77) PQENH(:,:)
+ READ (77) ZZGEOH(:,:)
+ READ (77) ZZQENH(:,:)
  READ (77) ZMIX(:)
  READ (77) ZQU(:,:)
  READ (77) ZSENH(:,:)
  READ (77) ZSUH(:,:)
- READ (77) PAPH(:,:)
+ READ (77) ZZAPH(:,:)
  CLOSE (77)
 ENDIF
 
@@ -250,13 +253,13 @@ ENDIF
         IF (LLGO_ON(JL)) THEN
           IS         = IS+1
           ZMIX(JL)=MIN(1.0_JPRB,ZMIX(JL))
-          ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
+          ZQF = (ZZQENH(JL,JK+1) + ZZQENH(JL,JK))*0.5_JPRB
           ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_JPRB
           ZQU(JL,JK)= ZQU(JL,JK+1)*(1.0_JPRB-ZMIX(JL))+ ZQF*ZMIX(JL)
           ZSUH(JL,JK)= ZSUH(JL,JK+1)*(1.0_JPRB-ZMIX(JL))+ ZSF*ZMIX(JL)
           ZQOLD(JL)  = ZQU(JL,JK)
-          ZTU (JL,JK)= (ZSUH(JL,JK)-PGEOH(JL,JK))*ZRCPD
-          ZPH  (JL)  = PAPH(JL,JK)
+          ZTU (JL,JK)= (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
+          ZPH  (JL)  = ZZAPH(JL,JK)
         ENDIF
       ENDDO
 
