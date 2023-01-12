@@ -69,17 +69,14 @@ SUBROUTINE TEST0
 
 IMPLICIT NONE
 
-INTEGER :: JKK
 INTEGER :: JL
 INTEGER :: JK
 
 
-JKK = 14
-
-DO JK=JKK-1,2,-1
+DO JK=14-1,2,-1
 
 
-   IF(JKK==KLEV.OR.6==KLEV-1) THEN 
+   IF(14==KLEV.OR.6==KLEV-1) THEN 
       DO JL=KIDIA,KFDIA
        IF (LLGO_ON(JL)) THEN
          ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))+2.0_8*ZMIXF(JL)*ZSF) * ZTMP  
@@ -90,7 +87,7 @@ DO JK=JKK-1,2,-1
 
    ELSE
 
-     IF (JKK == 14 .AND. JK == 12) THEN
+     IF (JK == 12) THEN
        CALL R
      ENDIF
 
@@ -107,7 +104,7 @@ DO JK=JKK-1,2,-1
        ENDIF
      ENDDO
 
-     IF (JKK == 14 .AND. JK == 12) THEN
+     IF (JK == 12) THEN
        WRITE (*, '(" CUBASE 498 ",E30.20)') ZTU(6,JK)
      ENDIF
 
@@ -122,7 +119,6 @@ SUBROUTINE TEST1
 
 IMPLICIT NONE
 
-INTEGER ::JKK
 INTEGER ::JLON
 INTEGER ::JK
 
@@ -130,11 +126,9 @@ INTEGER ::JK
 JLON = KIDIA
 
 
-JKK = 14
+DO JK=14-1, 2,-1
 
-DO JK=JKK-1, 2,-1
-
-  IF (JKK==KLEV.OR.6==KLEV-1) THEN
+  IF (14==KLEV.OR.6==KLEV-1) THEN
     IF (LLGO_ON (JLON)) THEN
       ZSUH (JLON, JK)=(ZSUH (JLON, JK+1)*(1.0_8-ZMIX )+2.0_8*ZMIX *ZSF)*ZTMP
       ZQOLD =ZQU (JLON, JK)
@@ -142,7 +136,7 @@ DO JK=JKK-1, 2,-1
     ENDIF
   ELSE
 
-    IF (JKK==14.AND.JK==12) THEN
+    IF (JK==12) THEN
       CALL R
       ZMIX = ZMIXF (6)
     ENDIF
@@ -158,7 +152,7 @@ DO JK=JKK-1, 2,-1
       ZPH (JLON)=ZZAPH (JLON, JK)
     ENDIF
 
-    IF (JKK==14.AND.JK==12) THEN
+    IF (JK==12) THEN
       WRITE (*,'(" CUBASE 498 ",E30.20)') ZTU (JLON, JK)
     ENDIF
 
