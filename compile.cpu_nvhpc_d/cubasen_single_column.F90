@@ -335,13 +335,13 @@ DO JKK=KLEV, JKT1,-1
     IS=0
 
     IF (JKK==KLEV.OR.KINDEX==KLEV-1) THEN
-      WRITE (*,*)" CUBASE 409 "
+!     WRITE (*,*)" CUBASE 409 "
 
-      
+!     
 
-      IF (JKK==14.AND.JK==12) THEN
-        PRINT*," CUBASE 412 ", LLGO_ON (JLON)
-      ENDIF
+!     IF (JKK==14.AND.JK==12) THEN
+!       PRINT*," CUBASE 412 ", LLGO_ON (JLON)
+!     ENDIF
 
 
       IF (LLGO_ON (JLON)) THEN
@@ -376,26 +376,13 @@ DO JKK=KLEV, JKT1,-1
       ENDIF
 
 
-      
+!     
 
-      IF (JKK==14.AND.JK==12) THEN
-        WRITE (*,'(" CUBASE 439 ",E30.20)') ZTU (JLON, JK)
-      ENDIF
+!     IF (JKK==14.AND.JK==12) THEN
+!       WRITE (*,'(" CUBASE 439 ",E30.20)') ZTU (JLON, JK)
+!     ENDIF
 
     ELSE
-      WRITE (*,*)" CUBASE 443 "
-      ZXENTRORG=YDECUMF%ENTRORG
-
-      
-
-      IF (LLGO_ON (JLON)) THEN
-        
-        ZDZ =(PGEOH (JLON, JK)-PGEOH (JLON, JK+1))*ZRG
-        ZMIX =0.4_JPRB*ZXENTRORG*ZDZ *MIN (1.0_JPRB,(PQSEN (JLON, JK)/PQSEN (JLON, KLEV))**3)
-      ENDIF
-
-
-      
 
       IF (JKK==14.AND.JK==12) THEN
         WRITE (*,'(" CUBASE 457 ",L2)') LLGO_ON (JLON)

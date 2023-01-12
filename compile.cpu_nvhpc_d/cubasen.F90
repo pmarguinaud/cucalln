@@ -406,11 +406,11 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
     IS=0
 
     IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
-WRITE (*, *) " CUBASE 409 "
-      DO JL=KIDIA,KFDIA
-IF (JKK == 14 .AND. JK == 12) THEN
- PRINT *, " CUBASE 412 ", LLGO_ON(6)
-ENDIF
+!WRITE (*, *) " CUBASE 409 "
+       DO JL=KIDIA,KFDIA
+!IF (JKK == 14 .AND. JK == 12) THEN
+! PRINT *, " CUBASE 412 ", LLGO_ON(6)
+!ENDIF
         IF (LLGO_ON(JL)) THEN
           IS         = IS+1
           ZDZ(JL)    = (PGEOH(JL,JK) - PGEOH(JL,JK+1))*ZRG
@@ -435,23 +435,11 @@ ENDIF
         ENDIF
       ENDDO
 
-IF (JKK == 14 .AND. JK == 12) THEN
- WRITE (*, '(" CUBASE 439 ",E30.20)') ZTU(6,JK)
-ENDIF
+!IF (JKK == 14 .AND. JK == 12) THEN
+! WRITE (*, '(" CUBASE 439 ",E30.20)') ZTU(6,JK)
+!ENDIF
 
     ELSE
-WRITE (*, *) " CUBASE 443 "
-      ZXENTRORG=ENTRORG
-      DO JL=KIDIA,KFDIA
-        IF (LLGO_ON(JL)) THEN
-          !SPP: perturb ENTRORG parameter
-          IF (YSPP_CONFIG%LSPP.AND.YSPP_CONFIG%LPERT_ENTRORG) THEN
-            ZXENTRORG=ENTRORG*EXP(ZMU+YSPP_CONFIG%CMPERT_ENTRORG*PGP2DSPP(JL, IPENTRORG))
-          ENDIF
-          ZDZ(JL)    = (PGEOH(JL,JK) - PGEOH(JL,JK+1))*ZRG
-          ZMIX(JL)=0.4_JPRB*ZXENTRORG*ZDZ(JL)*MIN(1.0_JPRB,(PQSEN(JL,JK)/PQSEN(JL,KLEV))**3)
-        ENDIF
-      ENDDO
 
 IF (JKK == 14 .AND. JK == 12) THEN
  WRITE (*, '(" CUBASE 457 ",L2)') LLGO_ON(6)
