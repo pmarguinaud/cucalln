@@ -38,7 +38,7 @@ JKT2=2
   JKK = 14
 
  DO JK=JKK-1,JKT2,-1
-  JK = 12
+! JK = 12
     IS=0
 
     IF(JKK==KLEV.OR.6==KLEV-1) THEN ! 1/z mixing for shallow
