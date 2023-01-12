@@ -337,13 +337,13 @@ DO JKK=KLEV, JKT1,-1
     IF (JKK==KLEV.OR.KINDEX==KLEV-1) THEN
 
       IF (LLGO_ON (JLON)) THEN
-        IS=IS+1
+!       IS=IS+1
 
-        ZMIX =0.5_JPRB*ZDZ *PPLRG*ZEPS
+!       ZMIX =0.5_JPRB*ZDZ *PPLRG*ZEPS
 
-        IF (.NOT.LDTDKMF)  THEN
-            ZMIX =MIN (1.0_JPRB, ZMIX )
-        ENDIF
+!       IF (.NOT.LDTDKMF)  THEN
+!           ZMIX =MIN (1.0_JPRB, ZMIX )
+!       ENDIF
 
         ZQF=(PQENH (JLON, JK+1)+PQENH (JLON, JK))*0.5_JPRB
         ZSF=(ZSENH (JLON, JK+1)+ZSENH (JLON, JK))*0.5_JPRB
