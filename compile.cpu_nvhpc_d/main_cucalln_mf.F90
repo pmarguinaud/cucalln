@@ -8,6 +8,8 @@ INTEGER :: KIDIA
 INTEGER :: KFDIA 
 INTEGER :: KLON
 
+INTEGER :: IDUM
+
 KIDIA = 6
 KFDIA = 6
 KLON = 32
@@ -69,8 +71,8 @@ JKT2=2
 
 IF (JKK == 14 .AND. JK == 12) THEN
  OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED') 
- READ (77) KLON
- READ (77) KLEV
+ READ (77) IDUM
+ READ (77) IDUM
  READ (77) ZRCPD
  READ (77) LLGO_ON(:)
  READ (77) ZZGEOH(:,:)
@@ -163,8 +165,8 @@ JKT2=2
 
       IF (JKK==14.AND.JK==12) THEN
         OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED')
-        READ (77) KLON
-        READ (77) KLEV
+        READ (77) IDUM
+        READ (77) IDUM
         READ (77) ZRCPD
         READ (77) LLGO_ON 
         READ (77) ZZGEOH 
