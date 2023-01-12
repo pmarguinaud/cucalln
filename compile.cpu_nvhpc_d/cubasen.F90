@@ -209,210 +209,24 @@ REAL(KIND=JPRB) :: ZRCPD, ZRG, ZTMP
 REAL(KIND=JPRB) :: ZXENTRORG, ZMU
 REAL(KIND=JPRB) :: ZHOOK_HANDLE
 
-#include "cuadjtq.intfb.h"
-#include "fcttre.func.h"
-
-!----------------------------------------------------------------------
-!     0.           INITIALIZE CONSTANTS AND FIELDS
-!                  -------------------------------
-!----------------------------------------------------------------------
-
-PRINT *, " CUBASE 220 ", PCAPE (6)
-IF (LHOOK) CALL DR_HOOK('CUBASEN',0,ZHOOK_HANDLE)
 ASSOCIATE(RLMIN=>YDECLDP%RLMIN, &
  & RCPD=>YDCST%RCPD, RD=>YDCST%RD, RETV=>YDCST%RETV, RG=>YDCST%RG, &
  & R4IES=>YDTHF%R4IES, R4LES=>YDTHF%R4LES, R5IES=>YDTHF%R5IES, R5LES=>YDTHF%R5LES, &
  & RALFDCP=>YDTHF%RALFDCP, &
  & ENTRORG=>YDECUMF%ENTRORG, ENTSTPC1=>YDECUMF%ENTSTPC1, &
  & ENTSTPC2=>YDECUMF%ENTSTPC2, NJKT2=>YDECUMF%NJKT2, RDEPTHS=>YDECUMF%RDEPTHS)
-ZAW    = 1.0_JPRB
-ZBW    = 1.0_JPRB
-
-DO JL=KIDIA,KFDIA
-  PWUBASE(JL)=0.0_JPRB
-  LLGO_ON(JL)=.TRUE.
-  LLFIRST(JL)=.TRUE.
-  KDPL(JL)=KLEV
-ENDDO
 
 JKT1=KINDEX
 JKT2=NJKT2
-ZRG=1.0_JPRB/RG
-ZRCPD=1.0_JPRB/RCPD
 
-DO JK=1,KLEV
-  DO JL=KIDIA,KFDIA
-    ZTU(JL,JK) = PTU(JL,JK)
-    ZQU(JL,JK) = PQU(JL,JK)
-    ZLU(JL,JK) = PLU(JL,JK)
-    ILAB(JL,JK)= KLAB(JL,JK)
-    ZCAPE(JL,JK)= 0.0_JPRB
-  ENDDO
-ENDDO
-PRINT *, " CUBASE 521 ", ZCAPE (6,14)
-
-IF (YSPP_CONFIG%LSPP.AND.YSPP_CONFIG%LPERT_ENTRORG) THEN
-  IPENTRORG=YSPP%MPENTRORG
-  IF (YSPP_CONFIG%LLNN_MEAN1.OR.YSPP_CONFIG%LLNN_MEAN1_ENTRORG) THEN
-    ZMU = -0.5_JPRB * (YSPP_CONFIG%CMPERT_ENTRORG * YSPP_CONFIG%SDEV)**2  
-  ELSE
-    ZMU = 0._JPRB
-  ENDIF  
-ENDIF
-
-!----------------------------------------------------------------------
-!       -----------------------------------------------------------
-!       1.1  PREPARE FIELDS ON HALF LEVELS BY LINEAR INTERPOLATION
-!             OF SPECIFIC HUMIDITY AND STATIC ENERGY
-!       -----------------------------------------------------------
-
-DO JK=1,KLEV
-  DO JL=KIDIA,KFDIA
-    PWU2H(JL,JK)=0.0_JPRB
-    ZWU2H(JL,JK)=0.0_JPRB
-    ZS   (JL,JK) = RCPD*PTEN(JL,JK) + PGEO(JL,JK)
-    ZQENH(JL,JK) = PQENH(JL,JK)
-    ZSENH(JL,JK) = RCPD*PTENH(JL,JK)+PGEOH(JL,JK)
-  ENDDO
-ENDDO
-
-DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
-                    ! find first departure level that produces deepest cloud top
-                    ! or take surface level for shallow convection and Sc
-   !
-   !        ---------------------------------------------------------
-   !        1.2    INITIALISE FIELDS AT DEPARTURE HALF MODEL LEVEL
-   !        ---------------------------------------------------------
-   !
-  IS=0
-  DO JL=KIDIA,KFDIA
-    IF (LLGO_ON(JL)) THEN
-      IS=IS+1
-      IDPL(JL)    =JKK      ! departure level
-      ICBOT  (JL) =JKK      ! cloud base level for convection, (-1 if not found)
-      IBOTSC (JL) =KLEV-1   ! sc    base level for sc-clouds , (-1 if not found)
-      ICTOP(JL)   =KLEV-1   ! cloud top for convection (-1 if not found)
-      LLDCUM(JL)  =.FALSE.  ! on exit: true if cloudbase=found
-      LLDSC (JL)  =.FALSE.  ! on exit: true if cloudbase=found
-      LL_LDBASE(JL)   =.FALSE. ! on exit: true if cloudbase=found
-    ENDIF 
-  ENDDO
-
-  IF(IS /= 0) THEN
-
-    IF(JKK == KLEV) THEN
-
-      ZTEXC=0.2_JPRB
-      ZQEXC=1.E-4_JPRB
-      DO JL=KIDIA,KFDIA
-        IF (LLGO_ON(JL)) THEN
-          ZRHO  = PAPH(JL,JKK+1)/(RD*(PTEN(JL,JKK)*(1.0_JPRB+RETV*PQEN(JL,JKK))))
-          ZKHVFL= (PAHFS(JL,JKK+1)*ZRCPD+RETV*PTEN(JL,JKK)*PQHFL(JL,JKK+1))/(ZRHO*PPLRG*PPLDARE)
-          ZUST  = MAX( SQRT(PKMFL(JL)), 0.1_JPRB )
-          ZWS   = ZUST**3._JPRB - 1.5_JPRB*RKAP*ZKHVFL*(PGEOH(JL,KLEV)-PGEOH(JL,KLEV+1))/PTEN(JL,KLEV)
-          ZTEX(JL)= 0.0_JPRB
-          ZQEX(JL)= 0.0_JPRB
-          IF( ZKHVFL < 0.0_JPRB ) THEN
-            ZWS =1.2_JPRB*ZWS**.3333_JPRB
-            ILAB(JL,JKK)= 1
-            ZTEX(JL)   = MAX(-1.5_JPRB*PAHFS(JL,JKK+1)/(ZRHO*ZWS*RCPD*PPLRG*PPLDARE),ZTEXC)
-            ZQEX(JL)   = MAX(-1.5_JPRB*PQHFL(JL,JKK+1)/(ZRHO*ZWS*PPLRG*PPLDARE),ZQEXC)
-            ZQU (JL,JKK) = ZQENH(JL,JKK) + ZQEX(JL)
-            ZSUH (JL,JKK)= ZSENH(JL,JKK) + RCPD*ZTEX(JL)
-            ZTU (JL,JKK) = (ZSENH(JL,JKK)-PGEOH(JL,JKK))*ZRCPD + ZTEX(JL)
-            ZLU (JL,JKK) = 0.0_JPRB
-            ZWU2H(JL,JKK) = ZWS**2
-            PWU2H(JL,JKK) = ZWU2H(JL,JKK)
-        !
-        !  determine buoyancy at lowest half level
-        !
-            ZTVENH            = (1.0_JPRB+RETV*ZQENH(JL,JKK)) &
-             & *(ZSENH(JL,JKK)-PGEOH(JL,JKK))*ZRCPD  
-            ZTVUH             = (1.0_JPRB+RETV*ZQU(JL,JKK))*ZTU(JL,JKK)
-            ZBUOH(JL,JKK) = (ZTVUH-ZTVENH)*RG/ZTVENH
-          ELSE
-            LLGO_ON(JL)=.FALSE.      ! non-convective point
-          ENDIF
-        ENDIF
-      ENDDO
-   
-    ELSE
-
-      DO JL=KIDIA,KFDIA
-        IF (LLGO_ON(JL)) THEN
-          ZRHO  = PAPH(JL,JKK+1)/(RD*(PTEN(JL,JKK)*(1.+RETV*PQEN(JL,JKK))))
-          ILAB(JL,JKK)= 1
-          ZTEXC=0.2_JPRB
-          ZQEXC=1.E-4_JPRB
-          IF(JKK==KLEV-1) THEN
-            ZTEXC=MAX(ZTEXC,ZTEX(JL))
-            ZQEXC=MAX(ZQEXC,ZQEX(JL))
-            IF (LDTDKMF) THEN
-               ZTEXC=MIN(ZTEXC, 3.0_JPRB)
-               ZQEXC=MIN(ZQEXC, 2.E-3_JPRB)
-            ELSE
-               ZTEXC=MIN(ZTEXC, 1.0_JPRB)
-               ZQEXC=MIN(ZQEXC, 5.E-4_JPRB)
-            ENDIF
-          ENDIF
-          ZQU (JL,JKK) = ZQENH(JL,JKK) + ZQEXC
-          ZSUH (JL,JKK) = ZSENH(JL,JKK) + RCPD*ZTEXC
-          ZTU (JL,JKK) = (ZSENH(JL,JKK)-PGEOH(JL,JKK))*ZRCPD + ZTEXC
-          ZLU (JL,JKK) = 0.0_JPRB
-         ! construct mixed layer for parcels emanating in lowest 60 hPa
-          IF (PAPH(JL,KLEV+1)-PAPH(JL,JKK-1)<60.E2_JPRB) THEN
-            ZQU(JL,JKK) =0.0_JPRB
-            ZSUH(JL,JKK)=0.0_JPRB
-            ZWORK1      =0.0_JPRB
-            DO JK=JKK+1,JKK-1,-1
-              IF( ZWORK1 < 50.E2_JPRB ) THEN
-                ZWORK2=PAPH(JL,JK)-PAPH(JL,JK-1)
-                ZWORK1      =ZWORK1+ZWORK2
-                ZQU(JL,JKK) =ZQU(JL,JKK) +ZQENH(JL,JK)*ZWORK2
-                ZSUH(JL,JKK)=ZSUH(JL,JKK)+ZSENH(JL,JK)*ZWORK2
-              ENDIF
-            ENDDO
-            ZQU(JL,JKK) =ZQU(JL,JKK) /ZWORK1+ZQEXC
-            ZSUH(JL,JKK)=ZSUH(JL,JKK)/ZWORK1+RCPD*ZTEXC
-            ZTU(JL,JKK) =(ZSUH(JL,JKK)-PGEOH(JL,JKK))*ZRCPD+ZTEXC
-          ENDIF
-          ZWU2H(JL,JKK) = 1.0_JPRB
-        ! PWU2H(JL,JKK) = ZWU2H(JL,JKK)
-
-      !
-      !  determine buoyancy at lowest half level
-      !
-          ZTVENH            = (1.0_JPRB+RETV*ZQENH(JL,JKK)) &
-           & *(ZSENH(JL,JKK)-PGEOH(JL,JKK))*ZRCPD  
-          ZTVUH             = (1.0_JPRB+RETV*ZQU(JL,JKK))*ZTU(JL,JKK)
-          ZBUOH(JL,JKK) = (ZTVUH-ZTVENH)*RG/ZTVENH
-        ENDIF
-      ENDDO
-   
-    ENDIF
-
-  ENDIF
-   
-   !----------------------------------------------------------------------
-   !     2.0          DO ASCENT IN SUBCLOUD AND LAYER,
-   !                  CHECK FOR EXISTENCE OF CONDENSATION LEVEL,
-   !                  ADJUST T,Q AND L ACCORDINGLY IN *CUADJTQ*,
-   !                  CHECK FOR BUOYANCY AND SET FLAGS
-   !                  -------------------------------------
-   !       ------------------------------------------------------------
-   !        1.2  DO THE VERTICAL ASCENT UNTIL VELOCITY BECOMES NEGATIVE
-   !       ------------------------------------------------------------
+DO JKK=KLEV,JKT1,-1 
+  
   DO JK=JKK-1,JKT2,-1
     IS=0
 
     IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
        DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
-!         ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
-!         ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_JPRB
-!         ZTMP = 1.0_JPRB/(1.0_JPRB+ZMIX(JL))
-!         ZQU(JL,JK)= (ZQU(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
-!        & +2.0_JPRB*ZMIX(JL)*ZQF) * ZTMP  
           ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
          & +2.0_JPRB*ZMIX(JL)*ZSF) * ZTMP  
           ZQOLD(JL)  = ZQU(JL,JK)
@@ -436,7 +250,6 @@ IF (JKK == 14 .AND. JK == 12) THEN
  READ (77) ZSUH(:,:)
  READ (77) PAPH(:,:)
  CLOSE (77)
-
 ENDIF
 
       DO JL=KIDIA,KFDIA
@@ -467,5 +280,5 @@ ENDIF
 ENDDO 
 
 END ASSOCIATE
-IF (LHOOK) CALL DR_HOOK('CUBASEN',1,ZHOOK_HANDLE)
+
 END SUBROUTINE CUBASEN
