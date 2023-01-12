@@ -423,6 +423,7 @@ DO JKK=KLEV, JKT1,-1
         READ (77) ZSUH 
         READ (77) PAPH 
         CLOSE (77)
+        ZMIX = ZMIXF (6)
       ENDIF
 
 
