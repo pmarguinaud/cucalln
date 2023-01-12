@@ -408,9 +408,6 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
     IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
        DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
-!         IS         = IS+1
-!         ZMIX(JL)   = 0.5_JPRB*ZDZ(JL)*PPLRG*ZEPS
-!         IF (.NOT. LDTDKMF)  ZMIX(JL)   = MIN(1.0_JPRB, ZMIX(JL))
           ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
           ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_JPRB
           ZTMP = 1.0_JPRB/(1.0_JPRB+ZMIX(JL))
