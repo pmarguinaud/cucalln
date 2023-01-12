@@ -408,11 +408,11 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
     IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
        DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
-          ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
-          ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_JPRB
-          ZTMP = 1.0_JPRB/(1.0_JPRB+ZMIX(JL))
-          ZQU(JL,JK)= (ZQU(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
-         & +2.0_JPRB*ZMIX(JL)*ZQF) * ZTMP  
+!         ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
+!         ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_JPRB
+!         ZTMP = 1.0_JPRB/(1.0_JPRB+ZMIX(JL))
+!         ZQU(JL,JK)= (ZQU(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
+!        & +2.0_JPRB*ZMIX(JL)*ZQF) * ZTMP  
           ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_JPRB-ZMIX(JL))&
          & +2.0_JPRB*ZMIX(JL)*ZSF) * ZTMP  
           ZQOLD(JL)  = ZQU(JL,JK)
