@@ -335,29 +335,9 @@ DO JKK=KLEV, JKT1,-1
     IS=0
 
     IF (JKK==KLEV.OR.KINDEX==KLEV-1) THEN
-!     WRITE (*,*)" CUBASE 409 "
-
-!     
-
-!     IF (JKK==14.AND.JK==12) THEN
-!       PRINT*," CUBASE 412 ", LLGO_ON (JLON)
-!     ENDIF
-
 
       IF (LLGO_ON (JLON)) THEN
         IS=IS+1
-        ZDZ =(PGEOH (JLON, JK)-PGEOH (JLON, JK+1))*ZRG
-
-        IF (LDTDKMF) THEN
-          ZEPS=YDECUMF%ENTSTPC1/((PGEOH (JLON, JK)-PGEOH (JLON, KLEV+1))*ZRG*PPLRG)+YDECUMF%ENTSTPC2
-        ELSE
-          ZEPS=YDECUMF%ENTSTPC1/((PGEO (JLON, JK)-PGEOH (JLON, KLEV+1))*ZRG*PPLRG)+YDECUMF%ENTSTPC2
-
-          IF (LDMIXS.AND.KINDEX==KLEV.AND.ZLU (JLON, JK+1)>0.0_JPRB)  THEN
-              ZEPS=ZEPS*5
-          ENDIF
-
-        ENDIF
 
         ZMIX =0.5_JPRB*ZDZ *PPLRG*ZEPS
 
@@ -372,31 +352,12 @@ DO JKK=KLEV, JKT1,-1
         ZSUH (JLON, JK)=(ZSUH (JLON, JK+1)*(1.0_JPRB-ZMIX )+2.0_JPRB*ZMIX *ZSF)*ZTMP
         ZQOLD =ZQU (JLON, JK)
         ZTU (JLON, JK)=(ZSUH (JLON, JK)-PGEOH (JLON, JK))*ZRCPD
-        ZPH (JLON)=PAPH (JLON, JK)
       ENDIF
 
-
-!     
-
-!     IF (JKK==14.AND.JK==12) THEN
-!       WRITE (*,'(" CUBASE 439 ",E30.20)') ZTU (JLON, JK)
-!     ENDIF
 
     ELSE
 
       IF (JKK==14.AND.JK==12) THEN
-        WRITE (*,'(" CUBASE 457 ",L2)') LLGO_ON (JLON)
-        WRITE (*,'(" CUBASE 458 ",E30.20)') PGEOH (JLON, JK)
-        WRITE (*,'(" CUBASE 459 ",E30.20)') PQENH (JLON, JK)
-        WRITE (*,'(" CUBASE 460 ",E30.20)') PQENH (JLON, JK+1)
-        WRITE (*,'(" CUBASE 461 ",E30.20)') ZMIX 
-        WRITE (*,'(" CUBASE 462 ",E30.20)') ZQU (JLON, JK)
-        WRITE (*,'(" CUBASE 463 ",E30.20)') ZQU (JLON, JK+1)
-        WRITE (*,'(" CUBASE 464 ",E30.20)') ZSENH (JLON, JK)
-        WRITE (*,'(" CUBASE 465 ",E30.20)') ZSENH (JLON, JK+1)
-        WRITE (*,'(" CUBASE 466 ",E30.20)') ZSUH (JLON, JK)
-        WRITE (*,'(" CUBASE 467 ",E30.20)') ZSUH (JLON, JK+1)
-        WRITE (*,*)" KLON = ", KLON," KLEV = ", KLEV
         OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED')
         READ (77) KLON
         READ (77) KLEV

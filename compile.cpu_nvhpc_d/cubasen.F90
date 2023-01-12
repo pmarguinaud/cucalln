@@ -406,20 +406,9 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
     IS=0
 
     IF(JKK==KLEV.OR.KINDEX==KLEV-1) THEN ! 1/z mixing for shallow
-!WRITE (*, *) " CUBASE 409 "
        DO JL=KIDIA,KFDIA
-!IF (JKK == 14 .AND. JK == 12) THEN
-! PRINT *, " CUBASE 412 ", LLGO_ON(6)
-!ENDIF
         IF (LLGO_ON(JL)) THEN
           IS         = IS+1
-          ZDZ(JL)    = (PGEOH(JL,JK) - PGEOH(JL,JK+1))*ZRG
-          IF (LDTDKMF) THEN
-             ZEPS       = ENTSTPC1/((PGEOH(JL,JK)-PGEOH(JL,KLEV+1))*ZRG*PPLRG) + ENTSTPC2
-          ELSE
-             ZEPS       = ENTSTPC1/((PGEO(JL,JK)-PGEOH(JL,KLEV+1))*ZRG*PPLRG) + ENTSTPC2
-             IF(LDMIXS.AND.KINDEX==KLEV.AND.ZLU(JL,JK+1)>0.0_JPRB) ZEPS=ZEPS*5
-          ENDIF
           ZMIX(JL)   = 0.5_JPRB*ZDZ(JL)*PPLRG*ZEPS
           IF (.NOT. LDTDKMF)  ZMIX(JL)   = MIN(1.0_JPRB, ZMIX(JL))
           ZQF = (PQENH(JL,JK+1) + PQENH(JL,JK))*0.5_JPRB
@@ -431,29 +420,12 @@ DO JKK=KLEV,JKT1,-1 ! Big external loop for level testing:
          & +2.0_JPRB*ZMIX(JL)*ZSF) * ZTMP  
           ZQOLD(JL)  = ZQU(JL,JK)
           ZTU (JL,JK) = (ZSUH(JL,JK)-PGEOH(JL,JK))*ZRCPD
-          ZPH  (JL)    = PAPH(JL,JK)
         ENDIF
       ENDDO
-
-!IF (JKK == 14 .AND. JK == 12) THEN
-! WRITE (*, '(" CUBASE 439 ",E30.20)') ZTU(6,JK)
-!ENDIF
 
     ELSE
 
 IF (JKK == 14 .AND. JK == 12) THEN
- WRITE (*, '(" CUBASE 457 ",L2)') LLGO_ON(6)
- WRITE (*, '(" CUBASE 458 ",E30.20)') PGEOH(6,JK)
- WRITE (*, '(" CUBASE 459 ",E30.20)') PQENH(6,JK)
- WRITE (*, '(" CUBASE 460 ",E30.20)') PQENH(6,JK+1)
- WRITE (*, '(" CUBASE 461 ",E30.20)') ZMIX(6) 
- WRITE (*, '(" CUBASE 462 ",E30.20)') ZQU(6,JK)
- WRITE (*, '(" CUBASE 463 ",E30.20)') ZQU(6,JK+1)
- WRITE (*, '(" CUBASE 464 ",E30.20)') ZSENH(6,JK)
- WRITE (*, '(" CUBASE 465 ",E30.20)') ZSENH(6,JK+1)
- WRITE (*, '(" CUBASE 466 ",E30.20)') ZSUH(6,JK)
- WRITE (*, '(" CUBASE 467 ",E30.20)') ZSUH(6,JK+1)
-WRITE (*, *) " KLON = ", KLON, " KLEV = ", KLEV
  OPEN (77, FILE='fort.77.full', FORM='UNFORMATTED') 
  READ (77) KLON
  READ (77) KLEV
