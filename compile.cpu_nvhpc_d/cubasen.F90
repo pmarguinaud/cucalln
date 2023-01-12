@@ -8,114 +8,6 @@ SUBROUTINE CUBASEN &
  & KLAB,     LDCUM,    LDSC,     KCBOT,    KBOTSC,&
  & KCTOP,    KDPL,     PCAPE )  
 
-!          THIS ROUTINE CALCULATES CLOUD BASE FIELDS
-!          CLOUD BASE HEIGHT AND CLOUD TOP HEIGHT
-
-!          PURPOSE.
-!          --------
-!          TO PRODUCE CLOUD BASE AND CLOUD TOP VALUES FOR CU-PARAMETRIZATION
-
-!          INTERFACE
-!          ---------
-!          THIS ROUTINE IS CALLED FROM *CUMASTR*.
-!          INPUT ARE ENVIRONM. VALUES OF T,Q,P,PHI AT HALF LEVELS.
-!          IT RETURNS CLOUD FIELDS VALUES AND FLAGS AS FOLLOWS;
-!                 KLAB=0 FOR STABLE LAYERS
-!                 KLAB=1 FOR SUBCLOUD LEVELS
-!                 KLAB=2 FOR CLOUD LEVELS LEVEL
-
-!          METHOD.
-!          --------
-!          LIFT SURFACE AIR DRY-ADIABATICALLY TO CLOUD TOP
-!          (ENTRAINING PLUME, WITH ENTRAINMENT PROPORTIONAL TO (1/Z))
-
-!     PARAMETER     DESCRIPTION                                   UNITS
-!     ---------     -----------                                   -----
-!     INPUT PARAMETERS (INTEGER):
-
-!    *KIDIA*        START POINT
-!    *KFDIA*        END POINT
-!    *KLON*         NUMBER OF GRID POINTS PER PACKET
-!    *KLEV*         NUMBER OF LEVELS
-!    *KSPPN2D*      Number of 2D patterns in SPP scheme
-!    *KINDEX*       TOP INDEX FOR OUTER VERTICAL LOOP
-
-!    INPUT PARAMETERS (LOGICAL):
-!    *LDMIXS*        WEAK (FALSE) OR STRONG (TRUE) CLOUD MIXING FOR SURFACE PARCEL ONLY
-!    *LDTDKMF*      Arpege tuning (if TRUE)
-
-!    INPUT PARAMETERS (REAL):
-
-! not used at the moment because we want to use linear intepolation
-! for fields on the half levels.
-
-!    *PTENH*        ENV. TEMPERATURE (T+1) ON HALF LEVELS           K
-!    *PQENH*        ENV. SPEC. HUMIDITY (T+1) ON HALF LEVELS      KG/KG
-
-!    *PQHFL*        MOISTURE FLUX (EXCEPT FROM SNOW EVAP.)        KG/(SM2)
-!    *PAHFS*        SENSIBLE HEAT FLUX                            W/M2
-!    *PKMFL*        SURFACE KINEMATIC MOMENTUM FLUX              M2/S2  
-
-!    *PGEOH*        GEOPOTENTIAL ON HALF LEVELS                   M2/S2
-!    *PAPH*         PROVISIONAL PRESSURE ON HALF LEVELS             PA
-!    *PTEN*         PROVISIONAL ENVIRONMENT TEMPERATURE (T+1)       K
-!    *PQEN*         PROVISIONAL ENVIRONMENT SPEC. HUMIDITY (T+1)  KG/KG
-!    *PQSEN*        PROVISIONAL ENVIRONMENT SATU. HUMIDITY (T+1)  KG/KG
-!    *PGEO*         GEOPOTENTIAL                                  M2/S2
-!    *PQHFL*        MOISTURE FLUX (EXCEPT FROM SNOW EVAP.)        KG/(SM2)
-!    *PAHFS*        SENSIBLE HEAT FLUX                            W/M2
-!    *PGP2DSPP*     Standard stochastic variable (mean=0, SD=1)
-
-!    UPDATED PARAMETERS (REAL):
-
-!    *PTU*          TEMPERATURE IN UPDRAFTS                         K
-!    *PQU*          SPEC. HUMIDITY IN UPDRAFTS                    KG/KG
-!    *PLU*          LIQUID WATER CONTENT IN UPDRAFTS              KG/KG
-!    *PWU2H*        KINETIC ENERGY IN UPDRAFTS  SURFACE PARCEL    M2/S2
-
-!    UPDATED PARAMETERS (INTEGER):
-
-!    *KLAB*         FLAG KLAB=1 FOR SUBCLOUD LEVELS
-!                        KLAB=2 FOR CLOUD LEVELS
-
-!    OUTPUT PARAMETERS (LOGICAL):
-
-!    *LDCUM*        FLAG: .TRUE. FOR CONVECTIVE POINTS 
-!    *LDSC*         FLAG: .TRUE. IF BL-CLOUDS EXIST
-
-!    OUTPUT PARAMETERS (INTEGER):
-
-!    *KCBOT*       CLOUD BASE LEVEL !    
-!    *KCTOP*       CLOUD TOP LEVEL = HEIGHEST HALF LEVEL 
-!                  WITH A NON-ZERO CLOUD UPDRAFT.
-!    *KBOTSC*      CLOUD BASE LEVEL OF BL-CLOUDS
-!    *KDPL*        DEPARTURE LEVEL
-!    *PCAPE*       PSEUDOADIABATIQUE max CAPE (J/KG)
-
-!          EXTERNALS
-!          ---------
-!          *CUADJTQ* FOR ADJUSTING T AND Q DUE TO CONDENSATION IN ASCENT
-
-!     AUTHOR.
-!     -------
-!      A. Pier Siebesma   KNMI ********      
-
-!     MODIFICATIONS.
-!     --------------
-!      modified C Jakob (ECMWF) (01/2001) 
-!      modified P Bechtold (ECMWF) (08/2002) 
-!      02-11-02 : Use fixed last possible departure level and 
-!                 last updraft computation level for bit-reproducibility
-!                 D.Salmond &  J. Hague
-!      03-07-03 : Tuning for p690     J. Hague
-!      M.Hamrud      01-Oct-2003 CY28 Cleaning
-!      N.Semane+P.Bechtold    04-10-2012 Add RPLRG/RPLDARE factors for small planet
-!      M. Leutbecher & S.-J. Lock (Jan 2016) Introduced SPP scheme (LSPP)
-!      S.-J. Lock (01 Nov 2016) SPP bug fix for ENTRORG perturbations
-!      20210913 : Modifications for Arpege Y.Bouteloup (LDTDKMF)
-!     R. El Khatib 22-Jun-2022 A contribution to simplify phasing after the refactoring of YOMCLI/YOMCST/YOETHF.
-!----------------------------------------------------------------------
-
 USE YOEPHLI   , ONLY : TEPHLI
 USE PARKIND1  , ONLY : JPIM, JPRB
 USE YOMHOOK   , ONLY : LHOOK, DR_HOOK
@@ -169,100 +61,24 @@ INTEGER(KIND=JPIM),INTENT(OUT)   :: KCTOP(KLON)
 INTEGER(KIND=JPIM),INTENT(OUT)   :: KDPL(KLON) 
 REAL(KIND=JPRB)   ,INTENT(OUT)   :: PCAPE(KLON) 
 
-
-
-
-
-  
-
-
-
-
-
-
 LOGICAL ::         LLGO_ON(KLON)
-  
-
-
-
-
-
-
-
 INTEGER(KIND=JPIM) :: JKT2
 INTEGER(KIND=JPIM) :: JKT1
 INTEGER(KIND=JPIM) :: JKK
 INTEGER(KIND=JPIM) :: JL
 INTEGER(KIND=JPIM) :: JK
 INTEGER(KIND=JPIM) :: IS
-
-
-
-
-
-
 REAL(KIND=JPRB)    :: ZSUH (KLON,KLEV)
-
 REAL(KIND=JPRB)    :: ZSENH(KLON,KLEV+1)
- 
-
 REAL(KIND=JPRB) :: ZPH(KLON)
 REAL(KIND=JPRB) :: ZQOLD(KLON)
 REAL(KIND=JPRB) :: ZMIX(KLON)
-
-
-
-
-
 REAL(KIND=JPRB) :: ZTU(KLON,KLEV)
 REAL(KIND=JPRB) :: ZQU(KLON,KLEV)
-
-
- ! local for CAPE at every departure level
-
-     ! BUOYANCY
-      ! DENSITY AT SURFACE (KG/M^3) 
-    ! SURFACE BUOYANCY FLUX (K M/S)
-       ! SIGMA_W AT LOWEST MODEL HALFLEVEL (M/S)
-      ! U* 
-
-
- ! HUMIDITY EXCESS AT LOWEST MODEL HALFLEVEL (KG/KG)
-
-
- ! TEMPERATURE EXCESS AT LOWEST MODEL HALFLEVEL (K)
-      ! FRACTIONAL ENTRAINMENT RATE   [M^-1]
-    ! ENVIRONMENT VIRTUAL TEMPERATURE AT HALF LEVELS (K)  
-     ! UPDRAFT VIRTUAL TEMPERATURE AT HALF LEVELS     (K)
-    ! UPDRAFT LIQUID WATER FROZEN IN ONE LAYER
-
-
-
 REAL(KIND=JPRB) :: ZQF
 REAL(KIND=JPRB) :: ZSF
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-! work arrays for T and w perturbations
-
 REAL(KIND=JPRB) :: ZTMP
-
 REAL(KIND=JPRB) :: ZRCPD
-
-
-
 
 REAL(KIND=JPRB)     :: ZZQENH(KLON,KLEV) 
 REAL(KIND=JPRB)     :: ZZGEOH(KLON,KLEV+1) 
