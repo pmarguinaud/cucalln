@@ -78,48 +78,46 @@ INTEGER :: JK
 JKT1=6
 JKT2=2
 
-  JKK = 14
+JKK = 14
 
- DO JK=JKK-1,JKT2,-1
+DO JK=JKK-1,JKT2,-1
 
 
-    IF(JKK==KLEV.OR.6==KLEV-1) THEN 
-       DO JL=KIDIA,KFDIA
-        IF (LLGO_ON(JL)) THEN
-          ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))&
-         & +2.0_8*ZMIXF(JL)*ZSF) * ZTMP  
-          ZQOLD(JL)  = ZQU(JL,JK)
-          ZTU (JL,JK) = (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
-        ENDIF
-      ENDDO
-
-    ELSE
-
-IF (JKK == 14 .AND. JK == 12) THEN
-  CALL R
-ENDIF
-
+   IF(JKK==KLEV.OR.6==KLEV-1) THEN 
       DO JL=KIDIA,KFDIA
-        IF (LLGO_ON(JL)) THEN
-          ZMIXF(JL)=MIN(1.0_8,ZMIXF(JL))
-          ZQF = (ZZQENH(JL,JK+1) + ZZQENH(JL,JK))*0.5_8
-          ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_8
-          ZQU(JL,JK)= ZQU(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZQF*ZMIXF(JL)
-          ZSUH(JL,JK)= ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZSF*ZMIXF(JL)
-          ZQOLD(JL)  = ZQU(JL,JK)
-          ZTU (JL,JK)= (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
-          ZPH  (JL)  = ZZAPH(JL,JK)
-        ENDIF
-      ENDDO
+       IF (LLGO_ON(JL)) THEN
+         ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))+2.0_8*ZMIXF(JL)*ZSF) * ZTMP  
+         ZQOLD(JL)  = ZQU(JL,JK)
+         ZTU (JL,JK) = (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
+       ENDIF
+     ENDDO
 
-IF (JKK == 14 .AND. JK == 12) THEN
- WRITE (*, '(" CUBASE 498 ",E30.20)') ZTU(6,JK)
-ENDIF
+   ELSE
 
-    ENDIF
+     IF (JKK == 14 .AND. JK == 12) THEN
+       CALL R
+     ENDIF
 
-   
- ENDDO
+     DO JL=KIDIA,KFDIA
+       IF (LLGO_ON(JL)) THEN
+         ZMIXF(JL)=MIN(1.0_8,ZMIXF(JL))
+         ZQF = (ZZQENH(JL,JK+1) + ZZQENH(JL,JK))*0.5_8
+         ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_8
+         ZQU(JL,JK)= ZQU(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZQF*ZMIXF(JL)
+         ZSUH(JL,JK)= ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZSF*ZMIXF(JL)
+         ZQOLD(JL)  = ZQU(JL,JK)
+         ZTU (JL,JK)= (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
+         ZPH  (JL)  = ZZAPH(JL,JK)
+       ENDIF
+     ENDDO
+
+     IF (JKK == 14 .AND. JK == 12) THEN
+       WRITE (*, '(" CUBASE 498 ",E30.20)') ZTU(6,JK)
+     ENDIF
+
+  ENDIF
+  
+ENDDO
    
 
 END SUBROUTINE 
@@ -142,52 +140,41 @@ JKT1=6
 JKT2=2
 
 
-  JKK = 14
+JKK = 14
 
- DO JK=JKK-1, JKT2,-1
+DO JK=JKK-1, JKT2,-1
 
+  IF (JKK==KLEV.OR.6==KLEV-1) THEN
+    IF (LLGO_ON (JLON)) THEN
+      ZSUH (JLON, JK)=(ZSUH (JLON, JK+1)*(1.0_8-ZMIX )+2.0_8*ZMIX *ZSF)*ZTMP
+      ZQOLD =ZQU (JLON, JK)
+      ZTU (JLON, JK)=(ZSUH (JLON, JK)-ZZGEOH (JLON, JK))*ZRCPD
+    ENDIF
+  ELSE
 
-    IF (JKK==KLEV.OR.6==KLEV-1) THEN
-
-      IF (LLGO_ON (JLON)) THEN
-        ZSUH (JLON, JK)=(ZSUH (JLON, JK+1)*(1.0_8-ZMIX )+2.0_8*ZMIX *ZSF)*ZTMP
-        ZQOLD =ZQU (JLON, JK)
-        ZTU (JLON, JK)=(ZSUH (JLON, JK)-ZZGEOH (JLON, JK))*ZRCPD
-      ENDIF
-
-
-    ELSE
-
-      IF (JKK==14.AND.JK==12) THEN
-        CALL R
-        ZMIX = ZMIXF (6)
-      ENDIF
-
-
-      
-
-      IF (LLGO_ON (JLON)) THEN
-        ZMIX =MIN (1.0_8, ZMIX )
-        ZQF=(ZZQENH (JLON, JK+1)+ZZQENH (JLON, JK))*0.5_8
-        ZSF=(ZSENH (JLON, JK+1)+ZSENH (JLON, JK))*0.5_8
-        ZQU (JLON, JK)=ZQU (JLON, JK+1)*(1.0_8-ZMIX )+ZQF*ZMIX 
-        ZSUH (JLON, JK)=ZSUH (JLON, JK+1)*(1.0_8-ZMIX )+ZSF*ZMIX 
-        ZQOLD =ZQU (JLON, JK)
-        ZTU (JLON, JK)=(ZSUH (JLON, JK)-ZZGEOH (JLON, JK))*ZRCPD
-        ZPH (JLON)=ZZAPH (JLON, JK)
-      ENDIF
-
-
-      
-
-      IF (JKK==14.AND.JK==12) THEN
-        WRITE (*,'(" CUBASE 498 ",E30.20)') ZTU (JLON, JK)
-      ENDIF
-
+    IF (JKK==14.AND.JK==12) THEN
+      CALL R
+      ZMIX = ZMIXF (6)
     ENDIF
 
+    IF (LLGO_ON (JLON)) THEN
+      ZMIX =MIN (1.0_8, ZMIX )
+      ZQF=(ZZQENH (JLON, JK+1)+ZZQENH (JLON, JK))*0.5_8
+      ZSF=(ZSENH (JLON, JK+1)+ZSENH (JLON, JK))*0.5_8
+      ZQU (JLON, JK)=ZQU (JLON, JK+1)*(1.0_8-ZMIX )+ZQF*ZMIX 
+      ZSUH (JLON, JK)=ZSUH (JLON, JK+1)*(1.0_8-ZMIX )+ZSF*ZMIX 
+      ZQOLD =ZQU (JLON, JK)
+      ZTU (JLON, JK)=(ZSUH (JLON, JK)-ZZGEOH (JLON, JK))*ZRCPD
+      ZPH (JLON)=ZZAPH (JLON, JK)
+    ENDIF
 
- ENDDO
+    IF (JKK==14.AND.JK==12) THEN
+      WRITE (*,'(" CUBASE 498 ",E30.20)') ZTU (JLON, JK)
+    ENDIF
+
+  ENDIF
+
+ENDDO
 
 ENDSUBROUTINE 
 
