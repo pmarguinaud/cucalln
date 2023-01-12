@@ -20,7 +20,6 @@ CALL TEST1
 
 CONTAINS
 
-
 SUBROUTINE TEST0 
 
 IMPLICIT NONE
@@ -36,7 +35,7 @@ REAL(KIND=8) :: ZSUH (KLON,KLEV)
 REAL(KIND=8) :: ZSENH(KLON,KLEV+1)
 REAL(KIND=8) :: ZPH(KLON)
 REAL(KIND=8) :: ZQOLD(KLON)
-REAL(KIND=8) :: ZMIX(KLON)
+REAL(KIND=8) :: ZMIXF(KLON)
 REAL(KIND=8) :: ZTU(KLON,KLEV)
 REAL(KIND=8) :: ZQU(KLON,KLEV)
 REAL(KIND=8) :: ZQF
@@ -59,8 +58,8 @@ JKT2=2
     IF(JKK==KLEV.OR.6==KLEV-1) THEN 
        DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
-          ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_8-ZMIX(JL))&
-         & +2.0_8*ZMIX(JL)*ZSF) * ZTMP  
+          ZSUH (JL,JK)= (ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))&
+         & +2.0_8*ZMIXF(JL)*ZSF) * ZTMP  
           ZQOLD(JL)  = ZQU(JL,JK)
           ZTU (JL,JK) = (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
         ENDIF
@@ -76,7 +75,7 @@ IF (JKK == 14 .AND. JK == 12) THEN
  READ (77) LLGO_ON(:)
  READ (77) ZZGEOH(:,:)
  READ (77) ZZQENH(:,:)
- READ (77) ZMIX(:)
+ READ (77) ZMIXF(:)
  READ (77) ZQU(:,:)
  READ (77) ZSENH(:,:)
  READ (77) ZSUH(:,:)
@@ -87,11 +86,11 @@ ENDIF
       DO JL=KIDIA,KFDIA
         IF (LLGO_ON(JL)) THEN
           IS         = IS+1
-          ZMIX(JL)=MIN(1.0_8,ZMIX(JL))
+          ZMIXF(JL)=MIN(1.0_8,ZMIXF(JL))
           ZQF = (ZZQENH(JL,JK+1) + ZZQENH(JL,JK))*0.5_8
           ZSF = (ZSENH(JL,JK+1) + ZSENH(JL,JK))*0.5_8
-          ZQU(JL,JK)= ZQU(JL,JK+1)*(1.0_8-ZMIX(JL))+ ZQF*ZMIX(JL)
-          ZSUH(JL,JK)= ZSUH(JL,JK+1)*(1.0_8-ZMIX(JL))+ ZSF*ZMIX(JL)
+          ZQU(JL,JK)= ZQU(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZQF*ZMIXF(JL)
+          ZSUH(JL,JK)= ZSUH(JL,JK+1)*(1.0_8-ZMIXF(JL))+ ZSF*ZMIXF(JL)
           ZQOLD(JL)  = ZQU(JL,JK)
           ZTU (JL,JK)= (ZSUH(JL,JK)-ZZGEOH(JL,JK))*ZRCPD
           ZPH  (JL)  = ZZAPH(JL,JK)
