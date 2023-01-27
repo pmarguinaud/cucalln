@@ -72,22 +72,6 @@ sub replaceJLByJLON
     }
 }
 
-sub removeDIR
-{
-  my $d = shift;
-
-  # !DIR$ 
-  # !DEC$
-
-  my @dir = &F ('.//C[starts-with(string(.),"!DIR$") or starts-with(string(.),"!DEC$")]', $d);
-
-  for (@dir)
-    {
-      $_->unbindNode ();
-    }
-
-}
-
 sub removeSPP
 {
   my $d = shift;
@@ -112,6 +96,7 @@ sub preProcessIfNewer
   use Call;
   use Subroutine;
   use Canonic;
+  use DIR;
 
   &copyIfNewer (@_);
 
@@ -146,7 +131,7 @@ sub preProcessIfNewer
 
       &replaceJLByJLON ($d);
 
-      &removeDIR ($d);
+      &DIR::removeDIR ($d);
       &saveToFile ($d, "tmp/removeDIR/$f2");
 
       &removeSPP ($d);
